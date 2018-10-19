@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import kr.co.uniess.kto.batch.model.ExcelImage;
@@ -18,9 +19,11 @@ public class ExcelImageManipulateRunner implements CommandLineRunner {
   private final Logger logger = LoggerFactory.getLogger("ExcelImageManipulateRunner");
 
   @Autowired
+  @Lazy
   private BatchService xlsToCsvConversionService;
 
   @Autowired
+  @Lazy
   private BatchService imageManipulateService;
 
   @Override
