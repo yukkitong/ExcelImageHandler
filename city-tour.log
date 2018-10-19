@@ -1,0 +1,118 @@
+2018-10-18 11:10:06.521 INFO  1202 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Starting ExcelImageHandlerApplication v1.0.0-SNAPSHOT on jason-RC420-RC520-RC720 with PID 11346 (/home/jason/app/ExcelImageHandler/target/ExcelImageHandler-1.0.0-SNAPSHOT.jar started by jason in /home/jason/app/ExcelImageHandler)
+2018-10-18 11:10:06.526 INFO  1207 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - No active profile set, falling back to default profiles: default
+2018-10-18 11:10:06.627 INFO  1308 --- [ main ] o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@3339ad8e: startup date [Thu Oct 18 11:10:06 KST 2018]; root of context hierarchy
+2018-10-18 11:10:08.871 INFO  3552 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2018-10-18 11:10:08.875 INFO  3556 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2018-10-18 11:10:08.883 INFO  3564 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2018-10-18 11:10:08.908 INFO  3589 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Started ExcelImageHandlerApplication in 3.024 seconds (JVM running for 3.943)
+2018-10-18 11:10:08.960 INFO  3641 --- [ main ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2018-10-18 11:10:09.209 INFO  3890 --- [ main ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2018-10-18 11:10:09.286 INFO  3967 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518821: 서울 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.374 INFO  4055 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562480: 서울 시티투어 스카이버스 ] - INSERTED!! 
+2018-10-18 11:10:09.394 INFO  4075 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518833: 인천 시티투어 야경투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.438 INFO  4119 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562483: 인천 시티투어 라인 코스 ] - INSERTED!! 
+2018-10-18 11:10:09.480 INFO  4161 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562484: 인천 시티투어 강화도테마투어 ] - INSERTED!! 
+2018-10-18 11:10:09.499 INFO  4180 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518896: 파주 시티투어 휴 당일 코스 ] - SKIPPED!! 
+2018-10-18 11:10:09.541 INFO  4222 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561097: 파주 시티투어 휴 1박2일 코스 ] - INSERTED!! 
+2018-10-18 11:10:09.559 INFO  4240 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518897: 광명 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.577 INFO  4258 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518894: 성남 시티투어 ‘도시樂버스’ 정기 코스 ] - SKIPPED!! 
+2018-10-18 11:10:09.621 INFO  4302 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562485: 성남 시티투어 ‘도시樂버스’ 특별 코스 ] - INSERTED!! 
+2018-10-18 11:10:09.638 INFO  4319 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518883: 광주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.655 INFO  4336 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518882: 고양 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.671 INFO  4352 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518874: 평택 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.689 INFO  4370 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518866: 뻔뻔 부천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.707 INFO  4388 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518867: 가평 관광지순환버스 ] - SKIPPED!! 
+2018-10-18 11:10:09.723 INFO  4404 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518861: 남양주 시티투어 정기 코스 ] - SKIPPED!! 
+2018-10-18 11:10:09.766 INFO  4447 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561758: 남양주 시티투어 수시 코스 ] - INSERTED!! 
+2018-10-18 11:10:09.785 INFO  4466 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518856: 화성시 시티투어 착한 여행 하루 ] - SKIPPED!! 
+2018-10-18 11:10:09.803 INFO  4484 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518854: 양주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.821 INFO  4502 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518849: 안성 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.839 INFO  4520 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518847: 안산 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.856 INFO  4537 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518827: 수원 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:09.895 INFO  4576 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561115: 오산 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:09.937 INFO  4618 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561125: 이천 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:09.981 INFO  4662 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561136: 여주 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.000 INFO  4681 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518825: 사계절 DMZ 연천드리밍(Dreaming)투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.017 INFO  4698 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518873: 양구 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.036 INFO  4717 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518870: 태백 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.055 INFO  4736 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518869: 정선 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.074 INFO  4755 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518863: 화천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.093 INFO  4774 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518855: 삼척 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.138 INFO  4819 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562645: 원주투어버스 ] - INSERTED!! 
+2018-10-18 11:10:10.158 INFO  4839 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518857: 원주 시티투어 테마형 ] - SKIPPED!! 
+2018-10-18 11:10:10.202 INFO  4883 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518893: 춘천 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.248 INFO  4929 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562486: 평창 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.267 INFO  4948 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518892: 세종 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.310 INFO  4991 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562487: 세종-공주 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.329 INFO  5010 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518887: 대전 시티투어 광역 코스 ] - SKIPPED!! 
+2018-10-18 11:10:10.350 INFO  5031 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518832: 대전 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.376 INFO  5057 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518899: 온양온천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.393 INFO  5074 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518842: 천안 시티투어 정규 코스 ] - SKIPPED!! 
+2018-10-18 11:10:10.412 INFO  5093 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518895: 천안 시티투어 테마 코스 ] - SKIPPED!! 
+2018-10-18 11:10:10.431 INFO  5112 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518877: 태안 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.450 INFO  5131 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518875: 서산 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.469 INFO  5150 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518876: 서천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.511 INFO  5192 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562488: 서천 시티투어 광역 코스 ] - INSERTED!! 
+2018-10-18 11:10:10.530 INFO  5211 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518836: 예산 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.550 INFO  5231 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518837: 부여 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.571 INFO  5252 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518835: 공주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.614 INFO  5295 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562490: 보령 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.632 INFO  5313 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518886: 제천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.650 INFO  5331 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518881: 청주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.669 INFO  5350 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518846: 충주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.710 INFO  5391 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562491: 단양 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:10.732 INFO  5413 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518888: 대구 시티투어 테마여행 ] - SKIPPED!! 
+2018-10-18 11:10:10.750 INFO  5431 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518823: 대구 시티투어 도심순환형 코스 ] - SKIPPED!! 
+2018-10-18 11:10:10.770 INFO  5451 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518889: 대구 중구 골목투어 청라버스 ] - SKIPPED!! 
+2018-10-18 11:10:10.812 INFO  5493 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562492: 대구 시티투어 더 플레이버스(김광석 버스) ] - INSERTED!! 
+2018-10-18 11:10:10.831 INFO  5512 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518858: 대구 시티투어 근교권 투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.849 INFO  5530 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518879: 김천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.867 INFO  5548 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518862: 안동 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.887 INFO  5568 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518843: 경주 시티투어 주간 ] - SKIPPED!! 
+2018-10-18 11:10:10.929 INFO  5610 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562493: 경주 시티투어 야간 ] - INSERTED!! 
+2018-10-18 11:10:10.947 INFO  5628 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518831: 영주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:10.987 INFO  5668 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562494: 포항 시티투어 정기 코스 ] - INSERTED!! 
+2018-10-18 11:10:11.027 INFO  5708 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562495: 포항 시티투어 테마 코스 ] - INSERTED!! 
+2018-10-18 11:10:11.071 INFO  5752 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562496: 구미 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:11.089 INFO  5770 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518826: 부산 시티투어 점보버스 ] - SKIPPED!! 
+2018-10-18 11:10:11.107 INFO  5788 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518822: 부산 BUTI 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.155 INFO  5836 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562497: 부산 BUTI 시티투어 2층버스 야경투어 ] - INSERTED!! 
+2018-10-18 11:10:11.175 INFO  5856 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518890: 울산 시티투어 테마형 코스 ] - SKIPPED!! 
+2018-10-18 11:10:11.193 INFO  5874 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518834: 울산시티투어 순환형 코스 ] - SKIPPED!! 
+2018-10-18 11:10:11.210 INFO  5891 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518884: 사천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.229 INFO  5910 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518885: 창녕 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.245 INFO  5926 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518878: 밀양 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.263 INFO  5944 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518864: 창원 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.280 INFO  5961 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518852: 거제 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.321 INFO  6002 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518859: 김해 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:11.363 INFO  6044 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562498: 전라북도 순환관광 수도권 출발 ] - INSERTED!! 
+2018-10-18 11:10:11.382 INFO  6063 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518865: 전라북도 순환관광 경상권 출발 1박2일 ] - SKIPPED!! 
+2018-10-18 11:10:11.400 INFO  6081 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518868: 익산 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.419 INFO  6100 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518853: 군산 시티투어 당일 코스 ] - SKIPPED!! 
+2018-10-18 11:10:11.459 INFO  6140 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2561765: 군산 시티투어 1박2일 코스 ] - INSERTED!! 
+2018-10-18 11:10:11.479 INFO  6160 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518828: 정읍 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.527 INFO  6208 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562499: 임실군 명소탐방 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:11.575 INFO  6256 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562500: 완주 테마버스 ] - INSERTED!! 
+2018-10-18 11:10:11.596 INFO  6277 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518860: 광주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.616 INFO  6297 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518880: 남도 한바퀴 주중 ] - SKIPPED!! 
+2018-10-18 11:10:11.664 INFO  6345 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562501: 남도 한바퀴 주말 ] - INSERTED!! 
+2018-10-18 11:10:11.685 INFO  6366 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518900: 여수 낭만버스 2층버스 ] - SKIPPED!! 
+2018-10-18 11:10:11.710 INFO  6391 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518850: 여수 낭만버스 일반버스 ] - SKIPPED!! 
+2018-10-18 11:10:11.729 INFO  6410 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518848: 나주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.749 INFO  6430 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518844: 햇빛 광양 투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.768 INFO  6449 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518845: 화순 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.786 INFO  6467 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518839: 목포 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.803 INFO  6484 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518838: 담양 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.823 INFO  6504 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518830: 강진 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.845 INFO  6526 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518824: 순천 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.888 INFO  6569 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2562502: 고흥 시티투어 ] - INSERTED!! 
+2018-10-18 11:10:11.906 INFO  6587 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Handle Item [ 2518840: 제주 시티투어 ] - SKIPPED!! 
+2018-10-18 11:10:11.914 INFO  6595 --- [ Thread-2 ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2018-10-18 11:10:11.982 INFO  6663 --- [ Thread-2 ] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2018-10-18 11:15:04.574 INFO  954  --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Starting ExcelImageHandlerApplication v1.0.0-SNAPSHOT on jason-RC420-RC520-RC720 with PID 11762 (/home/jason/app/ExcelImageHandler/target/ExcelImageHandler-1.0.0-SNAPSHOT.jar started by jason in /home/jason/app/ExcelImageHandler)
+2018-10-18 11:15:04.581 INFO  961  --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - No active profile set, falling back to default profiles: default
+2018-10-18 11:15:04.749 INFO  1129 --- [ main ] o.s.c.a.AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@64cee07: startup date [Thu Oct 18 11:15:04 KST 2018]; root of context hierarchy
+2018-10-18 11:15:06.794 INFO  3174 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2018-10-18 11:15:06.797 INFO  3177 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2018-10-18 11:15:06.813 INFO  3193 --- [ main ] o.s.j.e.a.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2018-10-18 11:15:06.885 INFO  3265 --- [ main ] k.c.u.k.b.ExcelImageHandlerApplication - Started ExcelImageHandlerApplication in 3.331 seconds (JVM running for 3.959)
