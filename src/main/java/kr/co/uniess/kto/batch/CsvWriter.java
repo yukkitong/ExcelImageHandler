@@ -21,28 +21,26 @@ import kr.co.uniess.kto.batch.model.ExcelImage;
 
 public class CsvWriter {
 
-  private final static Logger logger = LoggerFactory.getLogger("csv-writer");
+    private final static Logger logger = LoggerFactory.getLogger(CsvWriter.class);
 
-  public static void write(List<ExcelImage> list, String filePath) throws IOException {
-    Path path = Paths.get(filePath);
-    try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-        StatefulBeanToCsv<ExcelImage> beanToCsv = new StatefulBeanToCsvBuilder<ExcelImage>(writer)
-                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
-                .withSeparator(';')
-                .build();
-        for (ExcelImage item : list) {
-          try {
-              beanToCsv.write(item);
-          } catch(CsvDataTypeMismatchException e) {
-              logger.error(e.getMessage(), e);
-          } catch(CsvRequiredFieldEmptyException e) {
-              logger.error(e.getMessage(), e);
-          }
+    public static void write(List<ExcelImage> list, String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            StatefulBeanToCsv<ExcelImage> beanToCsv = new StatefulBeanToCsvBuilder<ExcelImage>(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).withSeparator(';').build();
+            for (ExcelImage item : list) {
+                try {
+                    beanToCsv.write(item);
+                } catch (CsvDataTypeMismatchException e) {
+                    logger.error(e.getMessage(), e);
+                } catch (CsvRequiredFieldEmptyException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            throw e;
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-        logger.error(e.getMessage(), e);
-        throw e;
     }
-  }
 }

@@ -17,23 +17,23 @@ import kr.co.uniess.kto.batch.model.ExcelImage;
 @Service
 public class XlsToCsvConversionService extends AbstractBatchService {
 
-  private final Logger logger = LoggerFactory.getLogger(XlsToCsvConversionService.class);
+    private final Logger logger = LoggerFactory.getLogger(XlsToCsvConversionService.class);
 
-  private OutputFilenameGenerator generator;
+    private OutputFilenameGenerator generator;
 
-  @Autowired
-  public void setOutputFileNameGenerator(OutputFilenameGenerator csvFilenameGenerator) {
-    this.generator = csvFilenameGenerator;
-  }
-
-  @Override
-  public void execute() {
-    try {
-      List<ExcelImage> list = (List<ExcelImage>) getParameter("list");
-      String inputFilename = (String) getParameter("file");
-      CsvWriter.write(list, generator.generateNameBy(inputFilename));
-    } catch (IOException e) {
-      logger.error("\n", e);
+    @Autowired
+    public void setOutputFileNameGenerator(OutputFilenameGenerator csvFilenameGenerator) {
+        this.generator = csvFilenameGenerator;
     }
-  }
+
+    @Override
+    public void execute() {
+        try {
+            List<ExcelImage> list = (List<ExcelImage>) getParameter("list");
+            String inputFilename = (String) getParameter("file");
+            CsvWriter.write(list, generator.generateNameBy(inputFilename));
+        } catch (IOException e) {
+            logger.error("\n", e);
+        }
+    }
 }

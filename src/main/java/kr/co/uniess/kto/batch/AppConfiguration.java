@@ -13,18 +13,18 @@ import kr.co.uniess.kto.batch.component.CsvOutputFilenameGenerator;
 @Configuration
 public class AppConfiguration {
 
-  @Bean
-  public BatchService xlsToCsvConversionService() {
-    return new XlsToCsvConversionService();
-  }
+    @Bean
+    public BatchService xlsToCsvConversionService() {
+        return new XlsToCsvConversionService();
+    }
 
-  @Bean
-  public BatchService imageManipulateService() {
-    return new ImageManipulateService().rehearsalMode();
-  }
+    @Bean
+    public BatchService imageManipulateService() {
+        return new ImageManipulateService().rehearsalMode();
+    }
 
-  @Bean
-  public OutputFilenameGenerator csvOutputFilenameGenerator() {
-    return new CsvOutputFilenameGenerator();
-  }
+    @Bean
+    public OutputFilenameGenerator csvOutputFilenameGenerator() {
+        return new CsvOutputFilenameGenerator();
+    }
 }

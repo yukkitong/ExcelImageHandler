@@ -16,41 +16,41 @@ import kr.co.uniess.kto.batch.service.BatchService;
 @Component
 public class ExcelImageManipulateRunner implements CommandLineRunner {
 
-  private final Logger logger = LoggerFactory.getLogger("ExcelImageManipulateRunner");
+    private final Logger logger = LoggerFactory.getLogger("ExcelImageManipulateRunner");
 
-  @Autowired
-  @Lazy
-  private BatchService xlsToCsvConversionService;
+    @Autowired
+    @Lazy
+    private BatchService xlsToCsvConversionService;
 
-  @Autowired
-  @Lazy
-  private BatchService imageManipulateService;
+    @Autowired
+    @Lazy
+    private BatchService imageManipulateService;
 
-  @Override
-  public void run(String... args) throws Exception {
-    logger.info("START with - {}", Arrays.toString(args));
+    @Override
+    public void run(String... args) throws Exception {
+        logger.info("START with - {}", Arrays.toString(args));
 
-    if (args.length == 0) {
-      System.exit(1);
+        if (args.length == 0) {
+            System.exit(1);
+        }
+
+        final String filePath = args[0];
+
+        try {
+            XlsReader reader = new XlsReader();
+            List<ExcelImage> list = reader.loadExcelFile(filePath);
+
+            xlsToCsvConversionService.addParameter("list", list);
+            xlsToCsvConversionService.addParameter("file", filePath);
+            xlsToCsvConversionService.execute();
+
+            imageManipulateService.addParameter("list", list);
+            imageManipulateService.execute();
+        } catch (Exception e) {
+            logger.error("\n", e);
+            System.exit(1);
+        }
+
+        logger.info("CLOSED SUCCESSFULLY!");
     }
-    
-    final String filePath = args[0];
-
-    try {
-      XlsReader reader = new XlsReader();
-      List<ExcelImage> list = reader.loadExcelFile(filePath);
-      
-      xlsToCsvConversionService.addParameter("list", list);
-      xlsToCsvConversionService.addParameter("file", filePath);
-      xlsToCsvConversionService.execute();
-
-      imageManipulateService.addParameter("list", list);
-      imageManipulateService.execute();
-    } catch(Exception e) {
-      logger.error("\n", e);
-      System.exit(1);
-    }
-
-    logger.info("CLOSED SUCCESSFULLY!");
-  }
 }
