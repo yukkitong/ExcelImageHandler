@@ -1,4 +1,4 @@
-package kr.co.uniess.kto.batch.repository;
+package kr.co.uniess.kto.batch.repository.model;
 
 import lombok.Data;
 

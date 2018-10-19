@@ -1,10 +1,10 @@
-package kr.co.uniess.kto.batch;
+package kr.co.uniess.kto.batch.model;
 
 public class ExcelImage {
-  String contentId;
-  String title;
-  String url;
-  boolean isMain;
+  public String contentId;
+  public String title;
+  public String url;
+  public boolean isMain;
 
   @Override
   public String toString() {

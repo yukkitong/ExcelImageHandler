@@ -12,26 +12,30 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import kr.co.uniess.kto.batch.model.ExcelImage;
 
 
 public class XlsReader {
-  
-  private static final Logger logger = LoggerFactory.getLogger(XlsReader.class);
 
-  public static List<ExcelImage> loadExcelFile(XlsMeta meta) throws IOException {
-      return loadExcelFile(new File(meta.filePath), meta);
+  private final XlsConfig config;
+  
+  public XlsReader(XlsConfig config) {
+    this.config = config;
   }
 
-  private static List<ExcelImage> loadExcelFile(File file, XlsMeta meta) throws IOException {
-      final String sheetName = meta.sheetName;
-      final int startRowIndex = meta.startRow;
+  public List<ExcelImage> loadExcelFile(String filePath) throws IOException {
+      return loadExcelFile(new File(filePath));
+  }
 
-      final int contentIdIndex = meta.contentIdColumn;
-      final int contentTitleIndex = meta.contentTitleColumn;
-      final int imagePathIndex = meta.imagePathColumn;
-      final int primaryIndex = meta.primaryColumn;
+  public List<ExcelImage> loadExcelFile(File file) throws IOException {
+      final String sheetName = config.getSheetName();
+      final int startRowIndex = config.getStartRow();
+
+      final int contentIdIndex = config.getContentIdColumn();
+      final int contentTitleIndex = config.getContentTitleColumn();
+      final int imagePathIndex = config.getImagePathColumn();
+      final int mainIndex = config.getImagePathColumn();
 
       List<ExcelImage> result = new ArrayList<>();
       Workbook wb = null;
@@ -50,7 +54,7 @@ public class XlsReader {
                     image.contentId = getCellValue(row.getCell(contentIdIndex));
                     image.title = getCellValue(row.getCell(contentTitleIndex));
                     image.url = getCellValue(row.getCell(imagePathIndex));
-                    image.isMain = "O".equalsIgnoreCase(getCellValue(row.getCell(primaryIndex)));
+                    image.isMain = "O".equalsIgnoreCase(getCellValue(row.getCell(mainIndex)));
 
                     result.add(image);
                 }
@@ -61,7 +65,8 @@ public class XlsReader {
                 wb.close();
             }
         }
-        return result;
+
+        return distinct(result);
     }
 
     private static String getCellValue(Cell cell) {
@@ -84,4 +89,26 @@ public class XlsReader {
         }
         return valueString;
     }
+
+	/**
+	 * 정렬이된 경우에만 정상동작한다.
+	 * @param list
+	 * @return
+	 */
+	private static List<ExcelImage> distinct(List<ExcelImage> list) {
+        if (list.size() == 0) return list;
+		ArrayList<ExcelImage> result = new ArrayList<>(list.size());
+		for (int i = 0, size = list.size(); i < size; i ++) {
+			ExcelImage item = list.get(i);
+			boolean first = i == 0;
+			if (first) {
+				result.add(item);
+			} else {
+				if (!result.get(result.size() - 1).equals(item)) {
+					result.add(item);
+				}
+			}
+		}
+		return result;
+	}
 }

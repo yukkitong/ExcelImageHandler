@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
 
-import kr.co.uniess.kto.batch.repository.Image;
+import kr.co.uniess.kto.batch.repository.model.Image;
 
 @Configuration
 public class RepositoryConfiguration {
