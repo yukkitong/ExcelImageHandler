@@ -93,7 +93,7 @@ public class XlsReader {
             image.contentId = getContentId(row);
             image.title = getContentTitle(row);
             image.url = getImagePath(row);
-            image.isMain = config.getFindMainStrategy().isMain(getMainChk(row));
+            image.main = config.getFindMainStrategy().isMain(getMainChk(row));
             result.add(image);
         }
     }

@@ -1,10 +1,31 @@
 package kr.co.uniess.kto.batch.model;
 
+import com.opencsv.bean.CsvBindByName;
+
+import lombok.Getter;
+import lombok.Setter;
+
 public class ExcelImage {
+
+  @CsvBindByName
+  @Setter
+  @Getter
   public String contentId;
+
+  @CsvBindByName
+  @Setter
+  @Getter
   public String title;
+
+  @CsvBindByName
+  @Setter
+  @Getter
   public String url;
-  public boolean isMain;
+
+  @CsvBindByName
+  @Setter
+  @Getter
+  public boolean main;
 
   @Override
   public String toString() {
@@ -12,7 +33,7 @@ public class ExcelImage {
           nameValue("contentId", contentId) + ", " +
           nameValue("title", title) + ", " +
           nameValue("url", url) + ", " +
-          nameValue("isMain", String.valueOf(isMain)) +
+          nameValue("main", String.valueOf(main)) +
         ")";
   }
 

@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import kr.co.uniess.kto.batch.model.ExcelImage;
-import kr.co.uniess.kto.batch.service.ImageManipulateService;
+import kr.co.uniess.kto.batch.service.BatchService;
 
 @Component
 public class ExcelImageManipulateRunner implements CommandLineRunner {
@@ -18,7 +18,10 @@ public class ExcelImageManipulateRunner implements CommandLineRunner {
   private final Logger logger = LoggerFactory.getLogger("CommandLineRunner");
 
   @Autowired
-  private ImageManipulateService<ExcelImage> imageManipulateService;
+  private BatchService xlsToCsvConversionService;
+
+  @Autowired
+  private BatchService imageManipulateService;
 
   @Override
   public void run(String... args) throws Exception {
@@ -33,7 +36,13 @@ public class ExcelImageManipulateRunner implements CommandLineRunner {
     try {
       XlsReader reader = new XlsReader();
       List<ExcelImage> list = reader.loadExcelFile(filePath);
-      imageManipulateService.execute(list);
+      
+      xlsToCsvConversionService.addParameter("list", list);
+      xlsToCsvConversionService.addParameter("file", filePath);
+      xlsToCsvConversionService.execute();
+
+      imageManipulateService.addParameter("list", list);
+      imageManipulateService.execute();
     } catch(Exception e) {
       logger.error("\n", e);
       System.exit(1);
