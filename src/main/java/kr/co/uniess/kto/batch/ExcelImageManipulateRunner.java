@@ -15,7 +15,7 @@ import kr.co.uniess.kto.batch.service.BatchService;
 @Component
 public class ExcelImageManipulateRunner implements CommandLineRunner {
 
-  private final Logger logger = LoggerFactory.getLogger("CommandLineRunner");
+  private final Logger logger = LoggerFactory.getLogger("ExcelImageManipulateRunner");
 
   @Autowired
   private BatchService xlsToCsvConversionService;
