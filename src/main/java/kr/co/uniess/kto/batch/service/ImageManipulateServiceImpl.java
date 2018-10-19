@@ -18,68 +18,79 @@ import kr.co.uniess.kto.batch.repository.RepositoryUtils;
 
 @Service
 public class ImageManipulateServiceImpl implements ImageManipulateService<ExcelImage> {
-  
-  private final Logger logger = LoggerFactory.getLogger(ImageManipulateService.class);
 
-  private Map<String, String> cacheForContentId = new HashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(ImageManipulateService.class);
 
-	@Autowired
-	private ContentMasterRepository contentMasterRepository;
+    private Map<String, String> cacheForContentId = new HashMap<>();
 
-	@Autowired
-	private DatabaseMasterRepository databaseMasterRepository;
+    @Autowired
+    private ContentMasterRepository contentMasterRepository;
 
-	@Autowired
-  private ImageRepository imageRepository;
+    @Autowired
+    private DatabaseMasterRepository databaseMasterRepository;
 
-  private boolean isRehearsal;
+    @Autowired
+    private ImageRepository imageRepository;
 
-  public ImageManipulateServiceImpl() {
-    isRehearsal = false;
-  }
+    private boolean isRehearsal;
 
-	public ImageManipulateService<ExcelImage> rehearsalMode() {
-		isRehearsal = true;
-		return this;
-	}
-  
-	private void clearCache() {
-		cacheForContentId.clear();
-	}
-
-  @Override
-  public void execute(List<ExcelImage> list) {
-    clearCache();
-    for (ExcelImage item : list) {
-      handleItem(item);
+    public ImageManipulateServiceImpl() {
+        isRehearsal = false;
     }
-  }
-  
-	@Transactional
-	protected void handleItem(ExcelImage item) {
-		final String cotentId = item.contentId;
-		String cotId = null;
-		if (cacheForContentId.containsKey(cotentId)) {
-			cotId = cacheForContentId.get(cotentId);
-		} else {
-			cotId = contentMasterRepository.getCotId(cotentId);
-			cacheForContentId.put(cotentId, cotId);
-		}
-		if (cotId == null) {
-			logger.info(item + " - IGNORED! [COT_ID is NULL]");
-			return;
-		}
 
-		if (imageRepository.hasItem(cotId, item.url)) {
-			logger.info(item + " - SKIPPED!");
-		} else {
-			final String imgId = RepositoryUtils.generateRandomId();
-			if (!isRehearsal) imageRepository.insertImage(imgId, cotId, item.title, item.url, item.isMain);
-			logger.info(item + " - INSERTED! [IMG_ID: {}]", imgId);
-			if (item.isMain) {
-				if (!isRehearsal) databaseMasterRepository.updateItemOnlyImage(cotId, imgId);
-				logger.info(item + " - UPDATED AS MAIN [IMG_ID: {}]", imgId);
-			}
-		}
-  }
+    public ImageManipulateService<ExcelImage> rehearsalMode() {
+        isRehearsal = true;
+        return this;
+    }
+
+    private void clearCache() {
+        cacheForContentId.clear();
+    }
+
+    @Override
+    public void execute(List<ExcelImage> list) {
+        clearCache();
+        for (ExcelImage item : list) {
+            handleItem(item);
+        }
+    }
+
+    @Transactional
+    protected void handleItem(ExcelImage item) {
+        final String cotentId = item.contentId;
+        String cotId = null;
+        if (cacheForContentId.containsKey(cotentId)) {
+            cotId = cacheForContentId.get(cotentId);
+        } else {
+            cotId = contentMasterRepository.getCotId(cotentId);
+            cacheForContentId.put(cotentId, cotId);
+        }
+
+        if (cotId == null) {
+            logger.info(item + " - SKIPPED [COT_ID is NULL]");
+            return;
+        }
+
+        if (imageRepository.hasItem(cotId, item.url)) {
+            logger.info(item + " - SKIPPED");
+        } else {
+            final String imgId = RepositoryUtils.generateRandomId();
+            try {
+                if (item.isMain) {
+                    if (!isRehearsal) {
+                        imageRepository.insertImage(imgId, cotId, item.title, item.url, item.isMain);
+                        databaseMasterRepository.updateItemOnlyImage(cotId, imgId);
+                    }
+                    logger.info(item + " - INSERTED [as MAIN]");
+                } else {
+                    if (!isRehearsal) {
+                        imageRepository.insertImage(imgId, cotId, item.title, item.url, item.isMain);
+                    }
+                    logger.info(item + " - INSERTED");
+                }
+            } catch(Exception e) {
+                logger.info(item + " - FAILED");
+            }
+        }
+    }
 }
