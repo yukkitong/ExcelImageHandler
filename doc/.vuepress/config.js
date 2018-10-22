@@ -5,6 +5,5 @@ module.exports = {
       { text: 'Todo', link: '/todo/' },
       { text: 'Guide', link: '/guide/' },
     ]
-  },
-  port: 8008
+  }
 }

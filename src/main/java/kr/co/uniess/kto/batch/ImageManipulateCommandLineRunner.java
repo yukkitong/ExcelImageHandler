@@ -39,19 +39,19 @@ public class ImageManipulateCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         logger.info("START with - {}", Arrays.toString(args));
         
+        Options options = new Options();
+        options.addOption("i", true, "input file(xls or csv) path with an extension [.xls/.csv]");
+        options.addOption("c", false, "conversion only (xls -> csv)");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
         try {
-            Options options = new Options();
-            options.addOption("i", true, "input file(xls or csv) path with an extension [.xls/.csv]");
-            options.addOption("c", false, "convert xls -> csv");
-
-            CommandLineParser parser = new DefaultParser();
-            CommandLine cmd = parser.parse(options, args);
-
             if (cmd.hasOption("i")) {
                 String filePath = cmd.getOptionValue("i");
                 if (cmd.hasOption("c")) {
                     if (!filePath.endsWith(".xls")) {
-                        throw new RuntimeException("option 'c' needs a xls file only.");
+                        throw new RuntimeException("option 'c' needs a xls file only. [ " + filePath + " ]");
                     }
                     conversionManipulator.run(filePath);
                 } else if (filePath.endsWith(".xls")) {
@@ -60,14 +60,17 @@ public class ImageManipulateCommandLineRunner implements CommandLineRunner {
                     csvImageManipulator.run(filePath);
                 } else {
                     printUsage(options);
+                    System.exit(1);
                 }
             } else {
                 printUsage(options);
+                System.exit(1);
             }
 
             logger.info("END SUCCESSFULLY!");
         } catch(Exception e) {
             logger.error("END with errors", e);
+            System.exit(1);
         }
     }
 
