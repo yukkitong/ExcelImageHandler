@@ -9,7 +9,7 @@
 :::
 
   - 액셀 이미지 처리를 위한 Standalone Application 만들기
-    - [x] 액셀의 특정컬럼(`CONTENTID`, `TITLE`, `PATH`, `MAINCHK`) 로딩 모듈 만들기
+    - [x] 액셀의 특정컬럼(`CONTENTID`, `TITLE`, `PATH`, `MAINIMGCHK`) 로딩 모듈 만들기
     - [x] CSV 파일 저장 모듈 만들기
     - [x] CSV 파일 로딩 모듈 만들기
       - [ ] 저장된 CSV 파일의 무결성 검증하기
@@ -28,4 +28,7 @@
     - [ ] 재실행 기능
 
 ## Tour API Manipulation (Batch)
+::: tip
+관광공사 OpenAPI를 이용하여 정보를 수집 저장한다.
+:::
    - [ ] TourAPI3.0 
