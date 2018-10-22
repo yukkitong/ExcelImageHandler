@@ -17,18 +17,18 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.co.uniess.kto.batch.model.ExcelImage;
+import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class CsvWriter {
 
     private final static Logger logger = LoggerFactory.getLogger(CsvWriter.class);
 
-    public static void write(List<ExcelImage> list, String filePath) throws IOException {
+    public static void write(List<SourceImage> list, String filePath) throws IOException {
         Path path = Paths.get(filePath);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-            StatefulBeanToCsv<ExcelImage> beanToCsv = new StatefulBeanToCsvBuilder<ExcelImage>(writer)
+            StatefulBeanToCsv<SourceImage> beanToCsv = new StatefulBeanToCsvBuilder<SourceImage>(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER).withSeparator(';').build();
-            for (ExcelImage item : list) {
+            for (SourceImage item : list) {
                 try {
                     beanToCsv.write(item);
                 } catch (CsvDataTypeMismatchException e) {

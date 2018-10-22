@@ -1,0 +1,29 @@
+{
+  "name": "ExcelImageHandler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vuepress": "^0.14.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "doc:dev": "vuepress dev doc",
+    "doc:build": "vuepress build doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yukkitong/ExcelImageHandler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yukkitong/ExcelImageHandler/issues"
+  },
+  "homepage": "https://github.com/yukkitong/ExcelImageHandler#readme"
+}

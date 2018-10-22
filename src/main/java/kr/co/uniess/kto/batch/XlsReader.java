@@ -17,7 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kr.co.uniess.kto.batch.model.ExcelImage;
+import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class XlsReader {
 
@@ -37,14 +37,14 @@ public class XlsReader {
         }
     }
 
-    public List<ExcelImage> loadExcelFile(String filePath) throws IOException {
-        return loadExcelFile(new File(filePath));
+    public List<SourceImage> read(String filePath) throws IOException {
+        return read(new File(filePath));
     }
 
-    public List<ExcelImage> loadExcelFile(File file) throws IOException {
+    public List<SourceImage> read(File file) throws IOException {
         final String[] sheetNames = config.getSheetNames();
 
-        List<ExcelImage> result = new ArrayList<>();
+        List<SourceImage> result = new ArrayList<>();
         Workbook wb = null;
         try {
             wb = new HSSFWorkbook(new FileInputStream(file));
@@ -72,7 +72,7 @@ public class XlsReader {
         return distinct(result);
     }
 
-    private void loadSheet(Sheet sheet, List<ExcelImage> result) {
+    private void loadSheet(Sheet sheet, List<SourceImage> result) {
         clearIndexCache();
 
         int startRowIndex = -1;
@@ -89,7 +89,7 @@ public class XlsReader {
 
         for (int i = startRowIndex + 1 /* skip header + 1 */, size = sheet.getLastRowNum(); i < size; i++) {
             Row row = sheet.getRow(i);
-            ExcelImage image = new ExcelImage();
+            SourceImage image = new SourceImage();
             image.contentId = getContentId(row);
             image.title = getContentTitle(row);
             image.url = getImagePath(row);
@@ -125,35 +125,27 @@ public class XlsReader {
     }
 
     private String getContentId(Row row) {
-        int contentIdIndex = indexCache.get("CONTENTID") == null ? -1 : indexCache.get("CONTENTID");
-        if (contentIdIndex > -1) {
-            return getCellValue(row.getCell(contentIdIndex));
-        }
-        throw notFoundColumnException("Not found <CONTENTID> column");
+        return getCellData(row, "CONTENTID");
     }
 
     private String getContentTitle(Row row) {
-        int contentTitleIndex = indexCache.get("TITLE") == null ? -1 : indexCache.get("TITLE");
-        if (contentTitleIndex > -1) {
-            return getCellValue(row.getCell(contentTitleIndex));
-        }
-        throw notFoundColumnException("Not found <TITLE> column");
+        return getCellData(row, "TITLE");
     }
 
     private String getImagePath(Row row) {
-        int imagePathIndex = indexCache.get("PATH") == null ? -1 : indexCache.get("PATH");
-        if (imagePathIndex > -1) {
-            return getCellValue(row.getCell(imagePathIndex));
-        }
-        throw notFoundColumnException("Not found <PATH> column");
+        return getCellData(row, "PATH");
     }
 
     private String getMainChk(Row row) {
-        int mainIndex = indexCache.get("MAINIMGCHK") == null ? -1 : indexCache.get("MAINIMGCHK");
-        if (mainIndex > -1) {
-            return getCellValue(row.getCell(mainIndex));
+        return getCellData(row, "MAINIMGCHK");
+    }
+
+    private String getCellData(Row row, String cellTitle) {
+        int index = indexCache.get(cellTitle) == null ? -1 : indexCache.get(cellTitle);
+        if (index > -1) {
+            return getCellValue(row.getCell(index));
         }
-        throw notFoundColumnException("Not found <MAINIMGCHK> column");
+        throw notFoundColumnException("Not found <" + cellTitle + "> column");
     }
 
     private RuntimeException notFoundColumnException(String cause) {
@@ -187,14 +179,14 @@ public class XlsReader {
      * @param list
      * @return
      */
-    private static List<ExcelImage> distinct(List<ExcelImage> list) {
+    private static List<SourceImage> distinct(List<SourceImage> list) {
         if (list.size() == 0) {
             return list;
         }
 
-        ArrayList<ExcelImage> result = new ArrayList<>(list.size());
+        ArrayList<SourceImage> result = new ArrayList<>(list.size());
         for (int i = 0, size = list.size(); i < size; i++) {
-            ExcelImage item = list.get(i);
+            SourceImage item = list.get(i);
             boolean first = i == 0;
             if (first) {
                 result.add(item);

@@ -7,16 +7,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.uniess.kto.batch.model.ExcelImage;
+import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.ContentMasterRepository;
 import kr.co.uniess.kto.batch.repository.DatabaseMasterRepository;
 import kr.co.uniess.kto.batch.repository.ImageRepository;
 import kr.co.uniess.kto.batch.repository.RepositoryUtils;
 
 @Service
+@Scope("prototype")
 public class ImageManipulateService extends AbstractBatchService {
 
     private final Logger logger = LoggerFactory.getLogger(ImageManipulateService.class);
@@ -49,17 +51,18 @@ public class ImageManipulateService extends AbstractBatchService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void execute() {
         clearCache();
 
-        List<ExcelImage> list = (List<ExcelImage>) getParameter("list");
-        for (ExcelImage item : list) {
+        List<SourceImage> list = (List<SourceImage>) getParameter("list");
+        for (SourceImage item : list) {
             handleItem(item);
         }
     }
 
     @Transactional
-    protected void handleItem(ExcelImage item) {
+    protected void handleItem(SourceImage item) {
         final String cotentId = item.contentId;
         String cotId = null;
         if (cacheForContentId.containsKey(cotentId)) {

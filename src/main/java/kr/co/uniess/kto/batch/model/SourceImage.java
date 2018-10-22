@@ -5,31 +5,31 @@ import com.opencsv.bean.CsvBindByName;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ExcelImage {
+public class SourceImage {
 
-    @CsvBindByName
+    @CsvBindByName(column="CONTENTID")
     @Setter
     @Getter
     public String contentId;
 
-    @CsvBindByName
+    @CsvBindByName(column="TITLE")
     @Setter
     @Getter
     public String title;
 
-    @CsvBindByName
+    @CsvBindByName(column="URL")
     @Setter
     @Getter
     public String url;
 
-    @CsvBindByName
+    @CsvBindByName(column="MAIN")
     @Setter
     @Getter
     public boolean main;
 
     @Override
     public String toString() {
-        return "ExcelImage(" + nameValue("contentId", contentId) + ", " + nameValue("title", title) + ", "
+        return "SourceImage(" + nameValue("contentId", contentId) + ", " + nameValue("title", title) + ", "
                 + nameValue("url", url) + ", " + nameValue("main", String.valueOf(main)) + ")";
     }
 
@@ -37,11 +37,11 @@ public class ExcelImage {
     public boolean equals(Object o) {
         if (o == null)
             return false;
-        if (!(o instanceof ExcelImage))
+        if (!(o instanceof SourceImage))
             return false;
         if (o == this)
             return true;
-        ExcelImage t = (ExcelImage) o;
+            SourceImage t = (SourceImage) o;
         return contentId.equals(t.contentId) && url.equals(t.url);
     }
 
