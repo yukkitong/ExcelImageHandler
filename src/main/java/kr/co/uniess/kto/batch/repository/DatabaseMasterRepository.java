@@ -15,11 +15,11 @@ public class DatabaseMasterRepository {
         return jdbcTemplate.queryForObject(sql, new Object[] { cotId }, Integer.class) > 0;
     }
 
-    public int updateItemOnlyImage(String cotId, String imageId1) {
-        return updateItemOnlyImage(cotId, imageId1, imageId1);
+    public int updateItemImageOnly(String cotId, String imageId1) {
+        return updateItemImageOnly(cotId, imageId1, imageId1);
     }
 
-    public int updateItemOnlyImage(String cotId, String imageId1, String imageId2) {
+    public int updateItemImageOnly(String cotId, String imageId1, String imageId2) {
         String sql = "update DATABASE_MASTER set FIRST_IMAGE = ?, FIRST_IMAGE2 = ? where COT_ID = ?";
         return jdbcTemplate.update(sql, imageId1, imageId2, cotId);
     }

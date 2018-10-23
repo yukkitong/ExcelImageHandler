@@ -6,7 +6,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import kr.co.uniess.kto.batch.component.ConversionManipulator;
-import kr.co.uniess.kto.batch.component.CsvImageManipulator;
-import kr.co.uniess.kto.batch.component.ExcelImageManipulator;
+import kr.co.uniess.kto.batch.controller.ConversionController;
+import kr.co.uniess.kto.batch.controller.ExcelImageController;
 
 @Component
 public class ImageManipulateCommandLineRunner implements CommandLineRunner {
@@ -25,56 +26,85 @@ public class ImageManipulateCommandLineRunner implements CommandLineRunner {
 
     @Autowired
     @Lazy
-    private ExcelImageManipulator excelImageManipulator;
+    private ExcelImageController excelImageController;
 
     @Autowired
     @Lazy
-    private CsvImageManipulator csvImageManipulator;
-
-    @Autowired
-    @Lazy
-    private ConversionManipulator conversionManipulator;
+    private ConversionController conversionController;
 
     @Override
-    public void run(String... args) throws Exception {
-        logger.info("START with - {}", Arrays.toString(args));
+    public void run(String... args) throws Exception {    
+        logger.info("START with - {}", Arrays.toString(args));  
         
-        Options options = new Options();
-        options.addOption("i", true, "input file(xls or csv) path with an extension [.xls/.csv]");
-        options.addOption("c", false, "conversion only (xls -> csv)");
-
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = parser.parse(options, args);
-
+        // Parse Command and Options
+        Options options = createOptions();
+        CommandLine cmd = null; 
         try {
-            if (cmd.hasOption("i")) {
-                String filePath = cmd.getOptionValue("i");
-                if (cmd.hasOption("c")) {
-                    if (!filePath.endsWith(".xls")) {
-                        throw new RuntimeException("option 'c' needs a xls file only. [ " + filePath + " ]");
-                    }
-                    conversionManipulator.run(filePath);
-                } else if (filePath.endsWith(".xls")) {
-                    excelImageManipulator.run(filePath);
-                } else if (filePath.endsWith(".csv")) {
-                    csvImageManipulator.run(filePath);
-                } else {
-                    printUsage(options);
-                    System.exit(1);
-                }
-            } else {
-                printUsage(options);
-                System.exit(1);
-            }
+            CommandLineParser parser = new DefaultParser();
+            cmd = parser.parse(options, args);
+        } catch(ParseException e) {
+            e.printStackTrace();
+            printUsage(options);
+            System.exit(1);
+        }
 
+        if (!cmd.hasOption("i")) {
+            printUsage(options);
+            System.exit(1);
+        }
+
+        String filePath = cmd.getOptionValue("i");
+        try {
+            if (filePath.endsWith(".xls")) {
+                String[] sheetNames = null;
+                if (cmd.hasOption("s")) {
+                    sheetNames = cmd.getOptionValues("s");
+                }
+                XlsConfig config = null;
+                if (sheetNames != null) {
+                    config = new XlsConfig.Builder().sheetNames(sheetNames).build();
+                }
+                XlsReader reader = new XlsReader(config);
+                if (cmd.hasOption("csv")) {
+                    String csvFileName = filePath.substring(0, filePath.lastIndexOf(".xls")) + ".csv";
+                    conversionController.setOuputFilename(csvFileName);
+                    conversionController.run(reader.read(filePath));
+                } else {
+                    if (cmd.hasOption("eid")) {
+                        String eihId = cmd.getOptionValue("eid");
+                        excelImageController.setEihId(eihId);
+                    }
+                    excelImageController.run(reader.read(filePath));
+                }
+            } else if (filePath.endsWith(".csv")) {
+                if (cmd.hasOption("eid")) {
+                    String eihId = cmd.getOptionValue("eid");
+                    excelImageController.setEihId(eihId);
+                }
+                excelImageController.run(CsvReader.read(filePath));
+            } else {
+                throw new RuntimeException("No matched handler. [ " + filePath + " ]");
+            }
             logger.info("END SUCCESSFULLY!");
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("END with errors", e);
+            System.err.println(e.getMessage());
             System.exit(1);
         }
     }
 
-    private void printUsage(Options options) {
+    private Options createOptions() {
+        Options options = new Options();
+        options.addOption("i", "input", true, "input file(xls or csv) path and name with an extension [.xls/.csv]");
+        options.addOption("csv", false, "csv conversion only");
+        options.addOption("eid", "eih-id", true, "EIH TABLE's ID");
+        Option sheetOption = new Option("s", "sheet-names", true, "select sheet by names [name1 name2 ...]");
+        sheetOption.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(sheetOption);
+        return options;
+    }
+
+    private static void printUsage(Options options) {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("ExcelImageHandler 1.0", options);
     }

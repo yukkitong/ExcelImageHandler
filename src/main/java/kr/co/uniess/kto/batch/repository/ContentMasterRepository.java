@@ -27,9 +27,4 @@ public class ContentMasterRepository {
         String sql = "insert into CONTENT_MASTER (CONTENT_ID, COT_ID, TITLE) values (?, ?, ?)";
         return jdbcTemplate.update(sql, contentId, cotId, title);
     }
-
-    @SuppressWarnings("unused")
-    private String generateId() {
-        return RepositoryUtils.generateRandomId();
-    }
 }

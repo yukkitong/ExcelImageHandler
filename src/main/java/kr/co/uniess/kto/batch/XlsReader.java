@@ -175,7 +175,6 @@ public class XlsReader {
 
     /**
      * 정렬이된 경우에만 정상동작한다.
-     * 
      * @param list
      * @return
      */

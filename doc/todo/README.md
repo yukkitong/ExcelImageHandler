@@ -2,7 +2,7 @@
 
 [[toc]]
 
-## Excel Image Manipulation (Admin)
+## Admin 페이지 - 액셀 이미지 업로드
 
 ::: tip
 액셀에서 읽은 이미지 정보를 `IMAGE` 테이블에 최종 업데이트 하고, 결과에 따라 `DATABASE_MASTER`에 변경 정보를 적용한다.
@@ -27,8 +27,9 @@
       - [ ] 실행 이력 로그 분석 표시
     - [ ] 재실행 기능
 
-## Tour API Manipulation (Batch)
+## Tour API Batch
 ::: tip
 관광공사 OpenAPI를 이용하여 정보를 수집 저장한다.
 :::
    - [ ] TourAPI3.0 
+   - [ ] 업무 처리 기준 draw.io 이용 Flow Chart 그리기

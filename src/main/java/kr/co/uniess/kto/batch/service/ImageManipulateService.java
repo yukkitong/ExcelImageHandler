@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.ContentMasterRepository;
 import kr.co.uniess.kto.batch.repository.DatabaseMasterRepository;
+import kr.co.uniess.kto.batch.repository.ExcelImageUploadHistRepository;
 import kr.co.uniess.kto.batch.repository.ImageRepository;
 import kr.co.uniess.kto.batch.repository.RepositoryUtils;
 
 @Service
 @Scope("prototype")
-public class ImageManipulateService extends AbstractBatchService {
+public class ImageManipulateService implements BatchService<List<SourceImage>> {
 
     private final Logger logger = LoggerFactory.getLogger(ImageManipulateService.class);
 
@@ -32,32 +33,60 @@ public class ImageManipulateService extends AbstractBatchService {
     private DatabaseMasterRepository databaseMasterRepository;
 
     @Autowired
+    private ExcelImageUploadHistRepository excelImageUploadHistRepository;
+
+    @Autowired
     private ImageRepository imageRepository;
 
-    private boolean isRehearsal;
+    private boolean isDebug;
 
+    private String eihId;
 
-    public ImageManipulateService() {
-        isRehearsal = false;
+    private HashMap<String, Integer> counter;
+
+    private static final String MARK_SKIP = "SKIPPED";
+    private static final String MARK_SAVE = "SAVEED";
+    private static final String MARK_FAIL = "FAILED";
+
+    public ImageManipulateService(boolean isDebug) {
+        this.isDebug = isDebug;
+        this.eihId = null;
+        this.counter = new HashMap<>();
     }
 
-    public BatchService  rehearsalMode() {
-        isRehearsal = true;
-        return this;
+    public void setEihId(String eihId) {
+        this.eihId = eihId;
     }
 
     private void clearCache() {
         cacheForContentId.clear();
     }
 
+    private void resetCounter() {
+        counter.clear();
+        counter.put(MARK_SKIP, 0);
+        counter.put(MARK_SAVE, 0);
+        counter.put(MARK_FAIL, 0);
+    }
+
+    private void increase(String mark) {
+        counter.put(mark, counter.get(mark) + 1);
+    }
+    
     @Override
-    @SuppressWarnings("unchecked")
-    public void execute() {
+    public void execute(List<SourceImage> list) {
+        resetCounter();
         clearCache();
 
-        List<SourceImage> list = (List<SourceImage>) getParameter("list");
         for (SourceImage item : list) {
             handleItem(item);
+        }
+        
+        final int saveCount = counter.get(MARK_SAVE);
+        final int skipCount = counter.get(MARK_SKIP);
+        final int failCount = counter.get(MARK_FAIL);
+        if (eihId != null) {
+            excelImageUploadHistRepository.updateCount(eihId, saveCount, skipCount, failCount);
         }
     }
 
@@ -73,29 +102,33 @@ public class ImageManipulateService extends AbstractBatchService {
         }
 
         if (cotId == null) {
-            logger.info(item + " - SKIPPED [COT_ID is NULL]");
+            increase(MARK_SKIP);
+            logger.info(item + ":::SKIPPED [ `COT_ID` is NULL ]");
             return;
         }
 
         if (imageRepository.hasItem(cotId, item.url)) {
-            logger.info(item + " - SKIPPED");
+            increase(MARK_SKIP);
+            logger.info(item + ":::SKIPPED [ Already Stored! ]");
         } else {
-            final String imgId = RepositoryUtils.generateRandomId();
             try {
+                if (!isDebug) {
+                    final String imgId = RepositoryUtils.generateRandomId();
+                    imageRepository.insertImage(imgId, cotId, item.title, item.url, item.main);
+                    if (item.main) {
+                        databaseMasterRepository.updateItemImageOnly(cotId, imgId);
+                    }
+                    increase(MARK_SAVE);
+                }
+
                 if (item.main) {
-                    if (!isRehearsal) {
-                        imageRepository.insertImage(imgId, cotId, item.title, item.url, item.main);
-                        databaseMasterRepository.updateItemOnlyImage(cotId, imgId);
-                    }
-                    logger.info(item + " - INSERTED [as MAIN]");
+                    logger.info(item + ":::INSERTED [as MAIN]");
                 } else {
-                    if (!isRehearsal) {
-                        imageRepository.insertImage(imgId, cotId, item.title, item.url, item.main);
-                    }
-                    logger.info(item + " - INSERTED");
+                    logger.info(item + ":::INSERTED");
                 }
             } catch(Exception e) {
-                logger.info(item + " - FAILED");
+                increase(MARK_FAIL);
+                logger.info(item + ":::FAILED [ " + e.getMessage() + " ]");
             }
         }
     }

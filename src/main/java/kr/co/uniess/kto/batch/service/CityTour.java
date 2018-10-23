@@ -1,34 +1,38 @@
 package kr.co.uniess.kto.batch.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import kr.co.uniess.kto.batch.repository.ContentMasterRepository;
-import kr.co.uniess.kto.batch.repository.DatabaseMasterRepository;
-import kr.co.uniess.kto.batch.repository.ImageRepository;
+import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.RepositoryUtils;
 
-@Component
-public class CityTour extends AbstractBatchService {
+@Service
+public class CityTour implements BatchService<List<SourceImage>> {
 
     private final static Logger logger = LoggerFactory.getLogger(CityTour.class);
 
-    @Autowired
-    private ContentMasterRepository contentMasterRepository;
+    @Transactional
+    private void handleItem(String contentId, String title) {
+        // if (contentMasterRepository.hasItem(contentId)) {
+        //     logger.info("Item [ {}: {} ] - SKIPPED!! ", contentId, title);
+        // } else {
+        //     final String cotId = generateId();
+        //     contentMasterRepository.insertContentWithOnlyRequiredField(cotId, contentId, title);
+        //     databaseMasterRepository.createItem(cotId); // 일단 이미지를 NULL로 등록
+        //     logger.info("Item [ {}: {} ] - INSERTED!! ", contentId, title);
+        // }
+    }
 
-    @Autowired
-    private DatabaseMasterRepository databaseMasterRepository;
-
-    @Autowired
-    private ImageRepository imageRepository;
+    private String generateId() {
+        return RepositoryUtils.generateRandomId();
+    }
 
     @Override
-    public void execute() {
-
+    public void execute(List<SourceImage> list) {
         final int INDEX_TITLE = 0;
         final int INDEX_CID = 1;
 
@@ -69,21 +73,5 @@ public class CityTour extends AbstractBatchService {
             final String[] item = dataArray[row];
             handleItem(item[INDEX_CID], item[INDEX_TITLE]);
         }
-    }
-
-    @Transactional
-    private void handleItem(String contentId, String title) {
-        if (contentMasterRepository.hasItem(contentId)) {
-            logger.info("Item [ {}: {} ] - SKIPPED!! ", contentId, title);
-        } else {
-            final String cotId = generateId();
-            contentMasterRepository.insertContentWithOnlyRequiredField(cotId, contentId, title);
-            databaseMasterRepository.createItem(cotId); // 일단 이미지를 NULL로 등록
-            logger.info("Item [ {}: {} ] - INSERTED!! ", contentId, title);
-        }
-    }
-
-    private String generateId() {
-        return RepositoryUtils.generateRandomId();
-    }
+	}
 }
