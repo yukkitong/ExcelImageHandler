@@ -1,5 +1,5 @@
-# 시티투어 사진 초기화 후 새것(엑셀파일)으로 교체
-## `CONTENT_ID`에 해당하는 이미지 모두 삭제
+# 시티투어 사진 초기화 후 새것(엑셀파일)으로 교체 - 2018. 10. 22
+## STEP 1. `CONTENT_ID`에 해당하는 이미지 모두 삭제
    ``` sql
    DELETE FROM IMAGE 
     WHERE COT_ID = (
@@ -8,7 +8,7 @@
          WHERE CONTENT_ID='<content_id>'
     );
    ```
-## 신규 이미지 등록 
+## STEP 2. 신규 이미지 등록 
    ``` sql
    INSERT INTO IMAGE(IMG_ID, COT_ID, TITLE, URL, IS_THUBNAIL)
    VALUES (
@@ -19,7 +19,7 @@
        '<is_thumbnail>'
    );
    ```
-## `DATABASE_MASTER` 테이블에 대표이미지 업데이트
+## STEP 3. `DATABASE_MASTER` 테이블에 대표이미지 업데이트
    ``` sql
    UPDATE DATABASE_MASTER 
       SET FIRST_IMAGE = '<img_id>', FIRST_IMAGE2 = '<img_id>'

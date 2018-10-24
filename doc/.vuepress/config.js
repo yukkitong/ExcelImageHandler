@@ -8,11 +8,15 @@ module.exports = {
     sidebar: {
       '/todo/': [
         'upload_excel_image',
-        'tour_api_batch'
+        'tour_api_batch',
       ],
       '/done/': [
-        'city_tour_excel_image'
+        'city_tour_excel_image',
+        'no_pain_tour_distinct_detail_info',
+        // 'response-1',
+        // 'response-2',
+        // 'response-3',
       ]
     }
-  }
+  },
 }

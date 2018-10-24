@@ -1,0 +1,64 @@
+
+@api-url = http://api.visitkorea.or.kr/openapi/service/rest/KorService
+@api-url-green = http://api.visitkorea.or.kr/openapi/service/rest/GreenTourService
+@api-url-nopain = http://api.visitkorea.or.kr/openapi/service/rest/KorWithService
+@key = A%2BycgFhk2eYE6mEw%2B6%2FhcCbRDaCPGJf3aLCdYyfzuqRx6iY2b%2F04BmXgnQoTrGhm1FBQ%2BOVA5mbMogKlHFcDgw%3D%3D
+#2015년 1월 이후에 공공데이터포털에서 받은 인증키 경우, 인코딩 불필요
+@os = ETC
+@app = AppTesting
+
+### 지역기반 관광정보 조회
+GET {{api-url}}/areaBasedList
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &listYN=N
+    &numOfRows=10
+    &pageNo=1
+    &arrange=C
+    #&arange=[A!, B, C, D] #정렬구분
+    #&listYN=[Y!, N] #목록구분(Y: 목록, N: 개수)
+    #&areaCode=36 #지역코드
+    #&sigunguCode= #시군구코드
+    #&cat1
+    #&cat2
+    #&cat3
+Accept: application/json
+
+### 무장애 지역기반 관광정보 개수 조회
+GET {{api-url-nopain}}/areaBasedList
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &listYN=N
+Accept: application/json
+
+### 무장애 지역기반 관광정보 조회
+GET {{api-url-nopain}}/areaBasedList
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &listYN=Y
+    &arrange=C
+    &pageNo=1
+    &numOfRows=1
+Accept: application/json
+
+### 무장애 관광 상세(반복)정보 조회 => 숙박정보로 룸 정보 등의 응답이 옴
+GET {{api-url-nopain}}/detailInfo
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    &contentTypeId=32
+Accept: application/json
+
+### 무장애 관광 상세 정보 중 장애인 편의 시설에 대한 정보는 어디에서?
+GET {{api-url-nopain}}/detailWithTour
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=1937080
+    &contentTypeId=32
+Accept: application/json
+

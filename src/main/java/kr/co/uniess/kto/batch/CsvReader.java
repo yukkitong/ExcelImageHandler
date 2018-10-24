@@ -47,7 +47,7 @@ public class CsvReader {
     public static List<String> parseLine(String cvsLine, char separators, char customQuote) {
         List<String> result = new ArrayList<>();
         // if empty, return!
-        if (cvsLine == null && cvsLine.isEmpty()) {
+        if (cvsLine == null || cvsLine.isEmpty()) {
             return result;
         }
         if (customQuote == ' ') {
