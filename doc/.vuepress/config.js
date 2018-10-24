@@ -2,17 +2,16 @@ module.exports = {
   title: 'VISIT KOREA',
   themeConfig: {
     nav: [
-      { text: 'Todo', link: '/todo/' },
-      { text: 'Direct', link: '/direct/' },
-      { text: 'Guide', link: '/guide/' },
+      { text: 'TODO', link: '/todo/' },
+      { text: 'DONE', link: '/done/' },
     ],
     sidebar: {
       '/todo/': [
-        ''
+        'upload_excel_image',
+        'tour_api_batch'
       ],
-      '/direct/': [
-        '',
-        'excel_image'
+      '/done/': [
+        'city_tour_excel_image'
       ]
     }
   }

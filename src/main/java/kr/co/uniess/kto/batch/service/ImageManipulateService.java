@@ -129,6 +129,7 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
             } catch(Exception e) {
                 increase(MARK_FAIL);
                 logger.info(item + ":::FAILED [ " + e.getMessage() + " ]");
+                // TODO insert log message
             }
         }
     }

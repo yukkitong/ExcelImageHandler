@@ -22,7 +22,7 @@ import kr.co.uniess.kto.batch.controller.ExcelImageController;
 @Component
 public class ImageManipulateCommandLineRunner implements CommandLineRunner {
 
-    private final Logger logger = LoggerFactory.getLogger("ImageManipulateCommandLineRunner");
+    private final Logger logger = LoggerFactory.getLogger(ImageManipulateCommandLineRunner.class);
 
     @Autowired
     @Lazy
@@ -95,10 +95,10 @@ public class ImageManipulateCommandLineRunner implements CommandLineRunner {
 
     private Options createOptions() {
         Options options = new Options();
-        options.addOption("i", "input", true, "input file(xls or csv) path and name with an extension [.xls/.csv]");
-        options.addOption("csv", false, "csv conversion only");
-        options.addOption("eid", "eih-id", true, "EIH TABLE's ID");
-        Option sheetOption = new Option("s", "sheet-names", true, "select sheet by names [name1 name2 ...]");
+        options.addOption("i", "input", true, "처리할 액셀파일(.xls) 또는 CSV파일(.csv)을 입력하세요.");
+        options.addOption("csv", false, "액셀파일을 CSV 포맷으로 변환합니다.");
+        options.addOption("eid", "eih-id", true, "EIH 테이블의 ID를 입력하세요.");
+        Option sheetOption = new Option("s", "sheet-names", true, "액셀파일에서 특정 시트를 선택하여 처리합니다. [name1 name2 ...]");
         sheetOption.setArgs(Option.UNLIMITED_VALUES);
         options.addOption(sheetOption);
         return options;
