@@ -7,13 +7,16 @@
 @os = ETC
 @app = AppTesting
 
+
+
+
 ### 지역기반 관광정보 조회
 GET {{api-url}}/areaBasedList
     ?ServiceKey={{key}}
     &MobileOS={{os}}
     &MobileApp={{app}}
-    &listYN=N
-    &numOfRows=10
+    &listYN=Y
+    &numOfRows=100
     &pageNo=1
     &arrange=C
     #&arange=[A!, B, C, D] #정렬구분
@@ -25,14 +28,6 @@ GET {{api-url}}/areaBasedList
     #&cat3
 Accept: application/json
 
-### 무장애 지역기반 관광정보 개수 조회
-GET {{api-url-nopain}}/areaBasedList
-    ?ServiceKey={{key}}
-    &MobileOS={{os}}
-    &MobileApp={{app}}
-    &listYN=N
-Accept: application/json
-
 ### 무장애 지역기반 관광정보 조회
 GET {{api-url-nopain}}/areaBasedList
     ?ServiceKey={{key}}
@@ -41,7 +36,7 @@ GET {{api-url-nopain}}/areaBasedList
     &listYN=Y
     &arrange=C
     &pageNo=1
-    &numOfRows=1
+    &numOfRows=30
 Accept: application/json
 
 ### 무장애 관광 상세(반복)정보 조회 => 숙박정보로 룸 정보 등의 응답이 옴
@@ -53,12 +48,81 @@ GET {{api-url-nopain}}/detailInfo
     &contentTypeId=32
 Accept: application/json
 
+###
+GET {{api-url}}/commonInfo
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    &contentTypeId=32
+Accept: application/json
+
+###
+GET {{api-url}}/detailIntro
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    &contentTypeId=32
+Accept: application/json
+
+
 ### 무장애 관광 상세 정보 중 장애인 편의 시설에 대한 정보는 어디에서?
 GET {{api-url-nopain}}/detailWithTour
     ?ServiceKey={{key}}
     &MobileOS={{os}}
     &MobileApp={{app}}
-    &contentId=1937080
+    &contentId=2504463
     &contentTypeId=32
 Accept: application/json
 
+### 숙박정보 조회
+GET {{api-url}}/searchStay
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &arrange=C
+    &_type=json
+Accept: application/json
+
+### 공통정보 조회 - 개요
+GET {{api-url}}/detailCommon
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    #&contentTypeId=32
+    &overviewYN=Y
+    &_type=json
+    #&defaultYN=Y
+    #&firstImageYN=Y
+    #&areacodeYN=Y
+    #&catcodeYN=Y
+    #&addrinfoYN=Y
+    #&mapinfoYN=Y
+Accept: application/json
+
+### 소개정보 조회
+GET {{api-url}}/detailIntro
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    &contentTypeId=32
+    &introYN=Y
+    &_type=json
+Accept: application/json
+
+
+
+### 이미지 정보 조회
+GET {{api-url}}/detailImage
+    ?ServiceKey={{key}}
+    &MobileOS={{os}}
+    &MobileApp={{app}}
+    &contentId=2504463
+    &contentTypeId=32
+    &imageYN=Y
+    &subImageYN=Y
+    &_type=json
+Accept: application/json
