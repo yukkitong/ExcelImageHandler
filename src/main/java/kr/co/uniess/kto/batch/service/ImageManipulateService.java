@@ -78,8 +78,10 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
         resetCounter();
         clearCache();
 
+        int index = 0;
         for (SourceImage item : list) {
-            handleItem(item);
+            handleItem(item, index);
+            index ++;
         }
         
         final int saveCount = counter.get(MARK_SAVE);
@@ -90,15 +92,14 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
         }
     }
 
-    @Transactional
-    protected void handleItem(SourceImage item) {
-        final String cotentId = item.contentId;
-        String cotId = null;
-        if (cacheForContentId.containsKey(cotentId)) {
-            cotId = cacheForContentId.get(cotentId);
+    protected void handleItem(SourceImage item, int index) {
+        final String contentId = item.contentId;
+        String cotId;
+        if (cacheForContentId.containsKey(contentId)) {
+            cotId = cacheForContentId.get(contentId);
         } else {
-            cotId = contentMasterRepository.getCotId(cotentId);
-            cacheForContentId.put(cotentId, cotId);
+            cotId = contentMasterRepository.getCotId(contentId);
+            cacheForContentId.put(contentId, cotId);
         }
 
         if (cotId == null) {
@@ -107,24 +108,23 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
             return;
         }
 
-        if (imageRepository.hasItem(cotId, item.url)) {
+        if (imageRepository.findOne(cotId, item.url) != null) {
             increase(MARK_SKIP);
             logger.info(item + ":::SKIPPED [ Already Stored! ]");
         } else {
             try {
-                if (!isDebug) {
-                    final String imgId = RepositoryUtils.generateRandomId();
-                    imageRepository.insertImage(imgId, cotId, item.title, item.url, item.main);
-                    if (item.main) {
-                        databaseMasterRepository.updateItemImageOnly(cotId, imgId);
-                    }
-                    increase(MARK_SAVE);
+                final String title = getTitle(item, index);
+                final String newImgId = RepositoryUtils.generateRandomId();
+                imageRepository.insertImage(newImgId, cotId, title, item.url, item.main);
+                if (item.main) {
+                    databaseMasterRepository.updateItemImageOnly(cotId, newImgId);
                 }
 
+                increase(MARK_SAVE);
                 if (item.main) {
-                    logger.info(item + ":::INSERTED [as MAIN]");
+                    logger.info(item + ":::INSERT {} [as MAIN] {} - {}", cotId, newImgId, title);
                 } else {
-                    logger.info(item + ":::INSERTED");
+                    logger.info(item + ":::INSERT {} IMAGE TITLE {} - {}", cotId, newImgId, title);
                 }
             } catch(Exception e) {
                 increase(MARK_FAIL);
@@ -132,5 +132,9 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
                 // TODO insert log message
             }
         }
+    }
+
+    private String getTitle(SourceImage item, int index) {
+        return item.title + " " + index;
     }
 }
