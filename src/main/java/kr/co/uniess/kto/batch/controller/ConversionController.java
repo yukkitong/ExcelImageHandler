@@ -26,6 +26,7 @@ public class ConversionController implements IController<List<SourceImage>> {
         if (list == null) {
             throw new NullPointerException("source image list is null.");
         }
+        list.sort((o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.contentId, o2.contentId));
         convertService.execute(list);
     }
 }

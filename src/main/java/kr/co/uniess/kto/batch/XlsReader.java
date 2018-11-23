@@ -94,8 +94,16 @@ public class XlsReader {
             image.title = getContentTitle(row);
             image.url = getImagePath(row);
             image.main = config.getFindMainStrategy().isMain(getMainChk(row));
-            result.add(image);
+
+            if (!isEmpty(image.url)) {
+                result.add(image);
+            }
         }
+    }
+
+    private boolean isEmpty(String str) {
+        if (str == null) return true;
+        return str.trim().isEmpty();
     }
 
     private boolean findStartRowAndCacheColumn(Row row) {
@@ -157,7 +165,7 @@ public class XlsReader {
         if (cell != null) {
             CellType cellType = cell.getCellType();
             if (cellType.equals(CellType.STRING)) {
-                valueString = cell.getStringCellValue();
+                valueString = cell.getStringCellValue().replace(";", " ");
             } else if (cellType.equals(CellType.BLANK)) {
                 valueString = "";
             } else if (cellType.equals(CellType.BOOLEAN)) {

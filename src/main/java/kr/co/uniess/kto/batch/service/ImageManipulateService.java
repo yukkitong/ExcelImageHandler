@@ -1,15 +1,14 @@
 package kr.co.uniess.kto.batch.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
+import kr.co.uniess.kto.batch.repository.model.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.ContentMasterRepository;
@@ -78,6 +77,44 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
         resetCounter();
         clearCache();
 
+        HashMap<String, ArrayList<String>> contentMap = new HashMap<>();
+
+        ArrayList<String> urlList = null;
+        for (SourceImage item : list) {
+            if (!contentMap.containsKey(item.getContentId())) {
+                urlList = new ArrayList<>();
+                contentMap.put(item.getContentId(), urlList);
+            }
+            urlList.add(item.url);
+        }
+
+        for (String contentId : contentMap.keySet()) {
+            urlList = contentMap.get(contentId);
+            if (!urlList.isEmpty()) {
+                List<Image> targets = imageRepository.selectDeleteTarget(contentId, urlList.toArray(new String[0]));
+                if (targets != null && !targets.isEmpty()) {
+                    ArrayList<String> imgIds = new ArrayList<>(targets.size());
+                    ArrayList<String> imgPathList = new ArrayList<>(targets.size());
+                    for (Image i : targets) {
+                        imgIds.add(i.getImgId());
+                        imgPathList.add(i.getPath());
+                    }
+
+                    logger.info(":::DELETE::: {}EA, {}", targets.size(), Arrays.toString(targets.toArray()));
+//                    if (imageRepository.deleteImages(imgIds.toArray(new String[0])) > 0) {
+//                        // TODO LOG using `targets`
+//                        // TODO if exist file then delete it
+////                        for (String path : imgPathList) {
+////                            File file = new File(path);
+////                            file.delete();
+////                        }
+//                    }
+                }
+            }
+        }
+
+        contentMap.clear();
+
         int index = 0;
         for (SourceImage item : list) {
             handleItem(item, index);
@@ -92,7 +129,7 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
         }
     }
 
-    protected void handleItem(SourceImage item, int index) {
+    private void handleItem(SourceImage item, int index) {
         final String contentId = item.contentId;
         String cotId;
         if (cacheForContentId.containsKey(contentId)) {
@@ -104,13 +141,13 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
 
         if (cotId == null) {
             increase(MARK_SKIP);
-            logger.info(item + ":::SKIPPED [ `COT_ID` is NULL ]");
+            logger.info(item + ":::SKIPPED:::[ `COT_ID` is NULL ]");
             return;
         }
 
         if (imageRepository.findOne(cotId, item.url) != null) {
             increase(MARK_SKIP);
-            logger.info(item + ":::SKIPPED [ Already Stored! ]");
+            logger.info(item + ":::SKIPPED:::[ Already Stored! ]");
         } else {
             try {
                 final String title = getTitle(item, index);
@@ -122,13 +159,13 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
 
                 increase(MARK_SAVE);
                 if (item.main) {
-                    logger.info(item + ":::INSERT {} [as MAIN] {} - {}", cotId, newImgId, title);
+                    logger.info(item + ":::INSERT:::{} [as MAIN] {} - {}", cotId, newImgId, title);
                 } else {
-                    logger.info(item + ":::INSERT {} IMAGE TITLE {} - {}", cotId, newImgId, title);
+                    logger.info(item + ":::INSERT:::{} IMAGE TITLE {} - {}", cotId, newImgId, title);
                 }
             } catch(Exception e) {
                 increase(MARK_FAIL);
-                logger.info(item + ":::FAILED [ " + e.getMessage() + " ]");
+                logger.info(item + ":::FAILED:::[{}]", e.getMessage());
                 // TODO insert log message
             }
         }
