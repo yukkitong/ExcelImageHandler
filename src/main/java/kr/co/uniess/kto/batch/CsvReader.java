@@ -6,19 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class CsvReader {
+
+    private static final Logger logger = LoggerFactory.getLogger(CsvReader.class);
 
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
     public static List<SourceImage> read(String filePath) {
         List<SourceImage> list = new ArrayList<>();
+        String lineString = null;
         try (Scanner scanner = new Scanner(new File(filePath));) {
             boolean first = true;
             while (scanner.hasNext()) {
-                List<String> line = parseLine(scanner.nextLine(), ';');
+                lineString = scanner.nextLine();
+                List<String> line = parseLine(lineString, ';');
                 if (first) {
                     first = false; // skip header row
                     continue;
@@ -32,6 +39,9 @@ public class CsvReader {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("line : " + lineString, e);
+            throw e;
         }
         return list;
     }

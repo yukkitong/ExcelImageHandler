@@ -1,6 +1,7 @@
 package kr.co.uniess.kto.batch.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +17,12 @@ public class ContentMasterRepository {
     }
 
     public String getCotId(String contentId) {
-        String sql = "select COT_ID from CONTENT_MASTER where CONTENT_ID = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[] { contentId }, String.class);
+        try {
+            String sql = "select COT_ID from CONTENT_MASTER where CONTENT_ID = ?";
+            return jdbcTemplate.queryForObject(sql, new Object[] { contentId }, String.class);
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -26,9 +27,13 @@ public class ImageRepository {
      * @param url
      * @return boolean
      */
-    public boolean hasItem(String cotId, String url) {
-        String query = "select count(*) CNT from IMAGE where COT_ID = ? and URL = ?";
-        return jdbcTemplate.queryForObject(query, new Object[] { cotId, url }, Integer.class) > 0;
+    public String findOne(String cotId, String url) {
+        String query = "select IMG_ID CNT from IMAGE where COT_ID = ? and URL = ?";
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{cotId, url}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+          return null;
+        }
     }
 
     /**
@@ -38,12 +43,20 @@ public class ImageRepository {
      */
     public Image findFirst(String cotId) {
         String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL from IMAGE where COT_ID = ? limit 1";
-        return jdbcTemplate.queryForObject(query, new Object[] { cotId }, imageRowMapper);
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{cotId}, imageRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public List<Image> findAll(String cotId) {
         String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL from IMAGE where COT_ID = ?"; // thumbnail
-        return jdbcTemplate.queryForList(query, new Object[] { cotId }, Image.class);
+        try {
+            return jdbcTemplate.queryForList(query, new Object[] { cotId }, Image.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     /**
@@ -53,7 +66,11 @@ public class ImageRepository {
      */
     public Image findExact(String imgId) {
         String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL from IMAGE where IMG_ID = ?";
-        return jdbcTemplate.queryForObject(query, new Object[] { imgId }, imageRowMapper);
+        try {
+            return jdbcTemplate.queryForObject(query, new Object[]{imgId}, imageRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     /**
@@ -68,6 +85,11 @@ public class ImageRepository {
     public int insertImage(String imgId, String cotId, String desc, String url, boolean isThumbnail) {
         String sql = "insert into IMAGE (IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL) values (?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, imgId, cotId, desc, url, isThumbnail ? 1 : 0);
+    }
+
+    public int updateImageTitle(String imgId, String title) {
+        String sql = "update IMAGE set IMAGE_DESCRIPTION = ? where IMG_ID = ?";
+        return jdbcTemplate.update(sql, title, imgId);
     }
 
     /**

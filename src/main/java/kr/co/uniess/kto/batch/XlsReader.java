@@ -167,7 +167,7 @@ public class XlsReader {
             } else if (cellType.equals(CellType.FORMULA)) {
                 valueString = cell.getCellFormula();
             } else if (cellType.equals(CellType.NUMERIC)) {
-                valueString = String.valueOf(cell.getNumericCellValue());
+                valueString = String.valueOf(cell.getNumericCellValue()).replace(".0", "");
             }
         }
         return valueString;

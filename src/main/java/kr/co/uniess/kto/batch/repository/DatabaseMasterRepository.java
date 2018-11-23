@@ -29,6 +29,11 @@ public class DatabaseMasterRepository {
         return jdbcTemplate.update(sql, cotId);
     }
 
+    public int clearMainImages(String cotId) {
+        String sql = "update DATABASE_MASTER set FIRST_IMAGE = NULL, FIRST_IMAGE2 = NULL where COT_ID = ?";
+        return jdbcTemplate.update(sql, cotId);
+    }
+
     @SuppressWarnings("unused")
     private String generateId() {
         return RepositoryUtils.generateRandomId();
