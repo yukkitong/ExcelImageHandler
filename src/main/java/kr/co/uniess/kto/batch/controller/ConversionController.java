@@ -18,7 +18,7 @@ public class ConversionController implements IController<List<SourceImage>> {
     private ConvertService convertService;
 
     public void setOuputFilename(String filename) {
-        convertService.setOuputFilename(filename);
+        convertService.setOutputFilename(filename);
     }
 
     @Override

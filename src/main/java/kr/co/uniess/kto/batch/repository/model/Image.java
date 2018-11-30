@@ -35,7 +35,7 @@ public class Image {
     public String getPath() { return path; }
     public String getImgId() { return imgId; }
     public String getCotId() { return cotId; }
-    public String getImageDesciption() { return imageDescription; }
+    public String getImageDescription() { return imageDescription; }
     public String getUrl() { return url; }
     public boolean getThumbnail() { return thumbnail; }
 

@@ -104,10 +104,11 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
 //                    if (imageRepository.deleteImages(imgIds.toArray(new String[0])) > 0) {
 //                        // TODO LOG using `targets`
 //                        // TODO if exist file then delete it
-////                        for (String path : imgPathList) {
-////                            File file = new File(path);
-////                            file.delete();
-////                        }
+//                        for (String path : imgPathList) {
+//                            // TODO path must be an absolute path.
+//                            File file = new File(path);
+//                            file.delete();
+//                        }
 //                    }
                 }
             }

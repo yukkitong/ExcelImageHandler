@@ -14,22 +14,14 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class XlsReader {
 
-    private final static Logger logger = LoggerFactory.getLogger(XlsReader.class);
-
     private final XlsConfig config;
 
-    public XlsReader() {
-        this(null);
-    }
-
-    public XlsReader(XlsConfig config) {
+    XlsReader(XlsConfig config) {
         if (config == null) {
             this.config = XlsConfig.Builder.getNullBuilder().build();
         } else {
@@ -45,9 +37,7 @@ public class XlsReader {
         final String[] sheetNames = config.getSheetNames();
 
         List<SourceImage> result = new ArrayList<>();
-        Workbook wb = null;
-        try {
-            wb = new HSSFWorkbook(new FileInputStream(file));
+        try (Workbook wb = new HSSFWorkbook(new FileInputStream(file))) {
             final int numberOfSheets = wb.getNumberOfSheets();
             if (sheetNames != null) {
                 for (String sheetName : sheetNames) {
@@ -63,10 +53,6 @@ public class XlsReader {
                     Sheet sheet = wb.getSheetAt(sheetIndex);
                     loadSheet(sheet, result);
                 }
-            }
-        } finally {
-            if (wb != null) {
-                wb.close();
             }
         }
         return distinct(result);
@@ -166,8 +152,6 @@ public class XlsReader {
             CellType cellType = cell.getCellType();
             if (cellType.equals(CellType.STRING)) {
                 valueString = cell.getStringCellValue().replace(";", " ");
-            } else if (cellType.equals(CellType.BLANK)) {
-                valueString = "";
             } else if (cellType.equals(CellType.BOOLEAN)) {
                 valueString = String.valueOf(cell.getBooleanCellValue());
             } else if (cellType.equals(CellType.ERROR)) {
@@ -183,8 +167,8 @@ public class XlsReader {
 
     /**
      * 정렬이된 경우에만 정상동작한다.
-     * @param list
-     * @return
+     * @param list source list
+     * @return list
      */
     private static List<SourceImage> distinct(List<SourceImage> list) {
         if (list.size() == 0) {

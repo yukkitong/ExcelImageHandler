@@ -5,12 +5,7 @@ public class XlsConfig {
     private String[] sheetNameArray;
     private int[] sheetIndexArray;
 
-    private final FindMainStrategy defaultFindMainStrategy = new FindMainStrategy() {
-        @Override
-        public boolean isMain(String value) {
-            return "O".equalsIgnoreCase(value);
-        }
-    };
+    private final FindMainStrategy defaultFindMainStrategy = "O"::equalsIgnoreCase;
 
     private FindMainStrategy strategy = defaultFindMainStrategy;
 
@@ -43,7 +38,7 @@ public class XlsConfig {
         String[] sheetNameArray;
         int[] sheetIndexArray;
 
-        public Builder sheetNames(String... name) {
+        Builder sheetNames(String... name) {
             sheetNameArray = name;
             return this;
         }
@@ -57,7 +52,7 @@ public class XlsConfig {
             return new XlsConfig(this);
         }
 
-        public static Builder getNullBuilder() {
+        static Builder getNullBuilder() {
             return new Builder();
         }
     }

@@ -21,24 +21,17 @@ public class DeleteImageWithContentIdService implements BatchService<List<Source
 
     public DeleteImageWithContentIdService(boolean isDebug) {
         if (isDebug) {
-            delegate = new BatchService<List<SourceImage>>() {
-                @Override
-                public void execute(List<SourceImage> list) {
-                    for (SourceImage image : list) {
-                        logger.info(image + " - DELETED");
-                    }
+            delegate = list -> {
+                for (SourceImage image : list) {
+                    logger.info(image + " - DELETED");
                 }
             };
         } else {
-            delegate = new BatchService<List<SourceImage>>() {
-                @Override
-                @Transactional
-                public void execute(List<SourceImage> list) {
-                    for (SourceImage image : list) {
-                        final String cotentId = image.contentId;
-                        int count = imageRepository.deleteAllImageByContentId(cotentId);
-                        logger.info(image + " - DELETED [{}]", count);
-                    }
+            delegate = list -> {
+                for (SourceImage image : list) {
+                    final String contentId = image.contentId;
+                    int count = imageRepository.deleteAllImageByContentId(contentId);
+                    logger.info(image + " - DELETED [{}]", count);
                 }
             };
         }

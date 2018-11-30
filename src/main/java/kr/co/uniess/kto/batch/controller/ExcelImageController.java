@@ -1,6 +1,5 @@
 package kr.co.uniess.kto.batch.controller;
 
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class ExcelImageController implements IController<List<SourceImage>> {
 	}
 
     @Override
-    public void run(List<SourceImage> list) throws Exception {
+    public void run(List<SourceImage> list) {
         if (list == null) {
             throw new NullPointerException("source image list is null.");
         }

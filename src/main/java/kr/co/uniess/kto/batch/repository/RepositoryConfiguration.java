@@ -28,11 +28,9 @@ public class RepositoryConfiguration {
 
     @Bean
     public RowMapper<ContentMaster> getContentMasterRowMapper() {
-        return new RowMapper<ContentMaster>() {
-            public ContentMaster mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ContentMaster content = new ContentMaster();
-                return content;
-            }
+        return (rs, rowNum) -> {
+            ContentMaster content = new ContentMaster();
+            return content;
         };
     }
 }

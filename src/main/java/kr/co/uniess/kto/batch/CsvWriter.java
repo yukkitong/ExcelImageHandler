@@ -31,9 +31,7 @@ public class CsvWriter {
             for (SourceImage item : list) {
                 try {
                     beanToCsv.write(item);
-                } catch (CsvDataTypeMismatchException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (CsvRequiredFieldEmptyException e) {
+                } catch (CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
                     logger.error(e.getMessage(), e);
                 }
             }

@@ -17,7 +17,7 @@ public class ConvertService implements BatchService<List<SourceImage>> {
     
     private String outputFilename;
 
-    public void setOuputFilename(String filename) {
+    public void setOutputFilename(String filename) {
         this.outputFilename = filename;
     }
 
