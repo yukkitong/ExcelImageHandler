@@ -9,11 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import kr.co.uniess.kto.batch.model.SourceImage;
 
@@ -37,7 +33,10 @@ public class XlsReader {
         final String[] sheetNames = config.getSheetNames();
 
         List<SourceImage> result = new ArrayList<>();
-        try (Workbook wb = new HSSFWorkbook(new FileInputStream(file))) {
+        Workbook wb = null;
+        try {
+            // wb = new HSSFWorkbook(new FileInputStream(file));
+            wb = WorkbookFactory.create(file);
             final int numberOfSheets = wb.getNumberOfSheets();
             if (sheetNames != null) {
                 for (String sheetName : sheetNames) {
@@ -53,6 +52,10 @@ public class XlsReader {
                     Sheet sheet = wb.getSheetAt(sheetIndex);
                     loadSheet(sheet, result);
                 }
+            }
+        } finally {
+            if (wb != null) {
+                wb.close();
             }
         }
         return distinct(result);

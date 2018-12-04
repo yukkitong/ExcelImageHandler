@@ -1,5 +1,6 @@
 package kr.co.uniess.kto.batch.repository;
 
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
@@ -168,15 +169,20 @@ public class ImageRepository {
 
         int i = 0;
         Object[] params = new Object[urls.length + 1];
-        params[i ++] = contentId;
+        int[] paramTypes = new int[urls.length + 1];
+        paramTypes[i] = Types.VARCHAR;
+        params[i] = contentId;
+        i ++;
         for (String url : urls) {
-            params[i ++] = url;
+            paramTypes[i] = Types.VARCHAR;
+            params[i] = url;
+            i ++;
         }
 
         logger.trace(">>> " + sql);
         logger.trace(">>> " + Arrays.toString(params));
         try {
-            return jdbcTemplate.query(sql, params, imageRowMapper);
+            return jdbcTemplate.query(sql, params, paramTypes, imageRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

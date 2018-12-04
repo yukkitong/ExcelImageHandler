@@ -44,7 +44,7 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
     private HashMap<String, Integer> counter;
 
     private static final String MARK_SKIP = "SKIPPED";
-    private static final String MARK_SAVE = "SAVEED";
+    private static final String MARK_SAVE = "SAVED";
     private static final String MARK_FAIL = "FAILED";
 
     public ImageManipulateService(boolean isDebug) {
@@ -107,7 +107,9 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
 //                        for (String path : imgPathList) {
 //                            // TODO path must be an absolute path.
 //                            File file = new File(path);
-//                            file.delete();
+//                            if (file.exists()) {
+//                                file.delete();
+//                            }
 //                        }
 //                    }
                 }
