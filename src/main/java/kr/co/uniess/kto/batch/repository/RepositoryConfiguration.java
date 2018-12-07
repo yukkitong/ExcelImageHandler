@@ -1,21 +1,17 @@
 package kr.co.uniess.kto.batch.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import kr.co.uniess.kto.batch.model.DestImage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
-
-import kr.co.uniess.kto.batch.repository.model.Image;
 
 @Configuration
 public class RepositoryConfiguration {
 
     @Bean
-    public RowMapper<Image> getImageRowMapper() {
+    public RowMapper<DestImage> getImageRowMapper() {
         return (rs, rowNum) -> {
-            Image image = new Image();
+            DestImage image = new DestImage();
             image.setImgId(rs.getString("IMG_ID"));
             image.setCotId(rs.getString("COT_ID"));
             image.setImageDescription(rs.getString("IMAGE_DESCRIPTION"));

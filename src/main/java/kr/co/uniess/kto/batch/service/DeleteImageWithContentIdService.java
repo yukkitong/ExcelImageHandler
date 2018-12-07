@@ -2,12 +2,11 @@ package kr.co.uniess.kto.batch.service;
 
 import java.util.List;
 
+import kr.co.uniess.kto.batch.model.SourceImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.ImageRepository;
 
 public class DeleteImageWithContentIdService implements BatchService<List<SourceImage>> {

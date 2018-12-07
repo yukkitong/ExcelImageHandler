@@ -2,10 +2,10 @@ package kr.co.uniess.kto.batch.controller;
 
 import java.util.List;
 
+import kr.co.uniess.kto.batch.model.SourceImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.service.ConvertService;
 
 /**
@@ -17,7 +17,7 @@ public class ConversionController implements IController<List<SourceImage>> {
     @Autowired
     private ConvertService convertService;
 
-    public void setOuputFilename(String filename) {
+    public void setOutputFilename(String filename) {
         convertService.setOutputFilename(filename);
     }
 

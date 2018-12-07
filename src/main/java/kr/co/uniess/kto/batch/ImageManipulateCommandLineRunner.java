@@ -67,7 +67,7 @@ public class ImageManipulateCommandLineRunner implements CommandLineRunner {
                 XlsReader reader = new XlsReader(config);
                 if (cmd.hasOption("csv")) {
                     String csvFileName = filePath.substring(0, filePath.lastIndexOf(".xls")) + ".csv";
-                    conversionController.setOuputFilename(csvFileName);
+                    conversionController.setOutputFilename(csvFileName);
                     conversionController.run(reader.read(filePath));
                 } else {
                     if (cmd.hasOption("eid")) {

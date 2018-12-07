@@ -50,8 +50,12 @@ public class SourceImage {
 
     @Override
     public String toString() {
-        return "SourceImage(" + nameValue("contentId", contentId) + ", " + nameValue("title", title) + ", "
-                + nameValue("url", url) + ", " + nameValue("isMain", String.valueOf(main)) + ")";
+        return "SourceImage(" +
+                    nameValue("contentId", contentId) + ", " +
+                    nameValue("title", title) + ", " +
+                    nameValue("url", url) + ", " +
+                    nameValue("isMain", String.valueOf(main)) +
+                ")";
     }
 
     @Override

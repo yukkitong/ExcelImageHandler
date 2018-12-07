@@ -4,7 +4,7 @@ import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
 
-import kr.co.uniess.kto.batch.XlsReader;
+import kr.co.uniess.kto.batch.model.DestImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import kr.co.uniess.kto.batch.repository.model.Image;
 
 @Repository
 public class ImageRepository {
@@ -25,7 +23,7 @@ public class ImageRepository {
 
     @Autowired
     @Lazy
-    private RowMapper<Image> imageRowMapper;
+    private RowMapper<DestImage> imageRowMapper;
 
     /**
      * 등록된 이미지가 있는지 확인한다.
@@ -35,10 +33,13 @@ public class ImageRepository {
      */
     public String findOne(String cotId, String url) {
         String query = "select IMG_ID from IMAGE where COT_ID = ? and URL = ? limit 1";
+        logger.trace(">>> " + query);
+        logger.trace(">>> " + Arrays.toString(new Object[] { cotId, url }));
         try {
-            logger.trace(">>> " + query);
-            logger.trace(">>> " + Arrays.toString(new Object[] {cotId, url}));
-            return jdbcTemplate.queryForObject(query, new Object[]{ cotId, url }, String.class);
+            return jdbcTemplate.queryForObject(query,
+                    new Object[] { cotId, url },
+                    new int[] { Types.VARCHAR, Types.VARCHAR },
+                    String.class);
         } catch (EmptyResultDataAccessException e) {
           return null;
         }
@@ -49,23 +50,31 @@ public class ImageRepository {
      * @param cotId
      * @return object
      */
-    public Image findFirst(String cotId) {
-        String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL from IMAGE where COT_ID = ? limit 1";
+    public DestImage findFirst(String cotId) {
+        String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL " +
+                "from IMAGE where COT_ID = ? limit 1";
+        logger.trace(">>> " + query);
+        logger.trace(">>> " + cotId);
         try {
-            logger.trace(">>> " + query);
-            logger.trace(">>> " + cotId);
-            return jdbcTemplate.queryForObject(query, new Object[]{ cotId }, imageRowMapper);
+            return jdbcTemplate.queryForObject(query,
+                    new Object[] { cotId },
+                    new int[] { Types.VARCHAR },
+                    imageRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
-    public List<Image> findAll(String cotId) {
-        String query = "select IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL from IMAGE where COT_ID = ?"; // thumbnail
+    public List<DestImage> findAll(String cotId) {
+        String query = "select IMG_ID, COT_ID, IMAGE_PATH, IMAGE_DESCRIPTION, URL, IS_THUBNAIL " +
+                "from IMAGE where COT_ID = ?"; // thumbnail
+        logger.trace(">>> " + query);
+        logger.trace(">>> " + cotId);
         try {
-            logger.trace(">>> " + query);
-            logger.trace(">>> " + cotId);
-            return jdbcTemplate.query(query, new Object[] { cotId }, imageRowMapper);
+            return jdbcTemplate.query(query,
+                    new Object[] { cotId },
+                    new int[] { Types.VARCHAR },
+                    imageRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -74,14 +83,18 @@ public class ImageRepository {
     /**
      * IMG_ID 가 일치하는 하나의 이미지를 반환한다.
      * @param imgId
-     * @return Image object
+     * @return DestImage object
      */
-    public Image findExact(String imgId) {
-        String sql = "select IMG_ID, COT_ID, IMAGE_PATH, IMAGE_DESCRIPTION, URL, IS_THUBNAIL from IMAGE where IMG_ID = ?";
+    public DestImage findExact(String imgId) {
+        String sql = "select IMG_ID, COT_ID, IMAGE_PATH, IMAGE_DESCRIPTION, URL, IS_THUBNAIL " +
+                "from IMAGE where IMG_ID = ?";
+        logger.trace(">>> " + sql);
+        logger.trace(">>> " + imgId);
         try {
-            logger.trace(">>> " + sql);
-            logger.trace(">>> " + imgId);
-            return jdbcTemplate.queryForObject(sql, new Object[] { imgId }, imageRowMapper);
+            return jdbcTemplate.queryForObject(sql,
+                    new Object[] { imgId },
+                    new int[] { Types.VARCHAR },
+                    imageRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -97,17 +110,22 @@ public class ImageRepository {
      * @return integer
      */
     public int insertImage(String imgId, String cotId, String desc, String url, boolean isThumbnail) {
-        String sql = "insert into IMAGE (IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL) values (?, ?, ?, ?, ?)";
+        String sql = "insert into IMAGE (IMG_ID, COT_ID, IMAGE_DESCRIPTION, URL, IS_THUBNAIL) " +
+                "values (?, ?, ?, ?, ?)";
         logger.trace(">>> " + sql);
-        logger.trace(">>> " + Arrays.toString(new Object[] {imgId, cotId, desc, url, isThumbnail}));
+        logger.trace(">>> " + Arrays.toString(new Object[] { imgId, cotId, desc, url, isThumbnail }));
         return jdbcTemplate.update(sql, imgId, cotId, desc, url, isThumbnail ? 1 : 0);
     }
 
     public int updateImageTitle(String imgId, String title) {
         String sql = "update IMAGE set IMAGE_DESCRIPTION = ? where IMG_ID = ?";
         logger.trace(">>> " + sql);
-        logger.trace(">>> " + Arrays.toString(new Object[] {imgId, title}));
+        logger.trace(">>> " + Arrays.toString(new Object[] { imgId, title }));
         return jdbcTemplate.update(sql, title, imgId);
+    }
+
+    public int deleteImage(String imgId) {
+        return deleteImage(imgId, null);
     }
 
     /**
@@ -121,7 +139,7 @@ public class ImageRepository {
         if (url != null) {
             sql = sql + " and URL=?";
             logger.trace(">>> " + sql);
-            logger.trace(">>> " + Arrays.toString(new Object[] {imgId, url}));
+            logger.trace(">>> " + Arrays.toString(new Object[] { imgId, url }));
             return jdbcTemplate.update(sql, imgId, url);
         }
         logger.trace(">>> " + sql);
@@ -129,8 +147,8 @@ public class ImageRepository {
         return jdbcTemplate.update(sql, imgId);
     }
 
-    public int deleteImage(String imgId) {
-        return deleteImage(imgId, null);
+    public int deleteAllImageByCotId(String cotId) {
+        return deleteAllImageByCotId(cotId, null);
     }
 
     public int deleteAllImageByCotId(String cotId, String url) {
@@ -138,16 +156,12 @@ public class ImageRepository {
         if (url != null) {
             sql = sql + " and URL=?";
             logger.trace(">>> " + sql);
-            logger.trace(">>> " + Arrays.toString(new Object[] {cotId, url}));
+            logger.trace(">>> " + Arrays.toString(new Object[] { cotId, url }));
             return jdbcTemplate.update(sql, cotId, url);
         }
         logger.trace(">>> " + sql);
         logger.trace(">>> " + cotId);
         return jdbcTemplate.update(sql, cotId);
-    }
-
-    public int deleteAllImageByCotId(String cotId) {
-        return deleteAllImageByCotId(cotId, null);
     }
 
     public int deleteAllImageByContentId(String contentId) {
@@ -157,25 +171,27 @@ public class ImageRepository {
         return jdbcTemplate.update(sql, contentId);
     }
 
-    public List<Image> selectDeleteTarget(String contentId, String... urls) {
+    public List<DestImage> selectDeleteTarget(String contentId, String... urls) {
         if (urls == null || urls.length == 0) {
             return null;
         }
 
-        String sql = "select IMG_ID, COT_ID, IMAGE_PATH, IMAGE_DESCRIPTION, URL, IS_THUBNAIL from IMAGE where COT_ID = COTID(?) " +
-                "and URL not in (" +
-                    getQuestionMark(urls.length) +
-                ")";
+        String sql = "select IMG_ID, COT_ID, IMAGE_PATH, IMAGE_DESCRIPTION, URL, IS_THUBNAIL " +
+                "from IMAGE where COT_ID = COTID(?) " +
+                "and URL not in (" + getQuestionMark(urls.length) + ")";
 
         int i = 0;
+
         Object[] params = new Object[urls.length + 1];
         int[] paramTypes = new int[urls.length + 1];
-        paramTypes[i] = Types.VARCHAR;
+
         params[i] = contentId;
-        i ++;
+        paramTypes[i] = Types.VARCHAR;
+
+        i = 1;
         for (String url : urls) {
-            paramTypes[i] = Types.VARCHAR;
             params[i] = url;
+            paramTypes[i] = Types.VARCHAR;
             i ++;
         }
 

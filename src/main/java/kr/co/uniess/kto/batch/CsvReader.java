@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import kr.co.uniess.kto.batch.model.SourceImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class CsvReader {
 

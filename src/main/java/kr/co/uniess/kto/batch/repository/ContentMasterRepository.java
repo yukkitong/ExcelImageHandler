@@ -5,6 +5,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Types;
+
 @Repository
 public class ContentMasterRepository {
 
@@ -13,13 +15,19 @@ public class ContentMasterRepository {
 
     public boolean hasItem(String contentId) {
         String sql = "select count(*) CNT from CONTENT_MASTER where CONTENT_ID = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[] { contentId }, Integer.class) > 0;
+        return jdbcTemplate.queryForObject(sql,
+                new Object[] { contentId },
+                new int[] { Types.VARCHAR },
+                Integer.class) > 0;
     }
 
     public String getCotId(String contentId) {
         try {
             String sql = "select COT_ID from CONTENT_MASTER where CONTENT_ID = ?";
-            return jdbcTemplate.queryForObject(sql, new Object[] { contentId }, String.class);
+            return jdbcTemplate.queryForObject(sql,
+                    new Object[] { contentId },
+                    new int[] { Types.VARCHAR },
+                    String.class);
         } catch(EmptyResultDataAccessException e) {
             return null;
         }
@@ -29,7 +37,9 @@ public class ContentMasterRepository {
      * @param cotId generated ID
      */
     public int insertContentWithOnlyRequiredField(String cotId, String contentId, String title) {
-        String sql = "insert into CONTENT_MASTER (CONTENT_ID, COT_ID, TITLE) values (?, ?, ?)";
+        String sql = "insert into CONTENT_MASTER (" +
+                "CONTENT_ID, COT_ID, TITLE" +
+                ") values (?, ?, ?)";
         return jdbcTemplate.update(sql, contentId, cotId, title);
     }
 }

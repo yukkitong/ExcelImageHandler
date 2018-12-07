@@ -1,6 +1,6 @@
-package kr.co.uniess.kto.batch.repository.model;
+package kr.co.uniess.kto.batch.model;
 
-public class Image {
+public class DestImage {
     private String imgId;
     private String cotId;
     private String imageDescription;
@@ -41,7 +41,7 @@ public class Image {
 
     @Override
     public String toString() {
-        return "Image( imgId: " + imgId
+        return "DestImage( imgId: " + imgId
                 + ", cotId: " + cotId
                 + ", desc: " + imageDescription
                 + ", path: " + path

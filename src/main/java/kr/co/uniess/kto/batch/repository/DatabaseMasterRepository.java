@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Types;
+
 @Repository
 public class DatabaseMasterRepository {
 
@@ -12,7 +14,10 @@ public class DatabaseMasterRepository {
 
     public boolean hasItem(String cotId) {
         String sql = "select count(*) CNT from DATABASE_MASTER where COT_ID = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[] { cotId }, Integer.class) > 0;
+        return jdbcTemplate.queryForObject(sql,
+                new Object[] { cotId },
+                new int[] { Types.VARCHAR },
+                Integer.class) > 0;
     }
 
     public int updateItemImageOnly(String cotId, String imageId1) {
@@ -20,7 +25,9 @@ public class DatabaseMasterRepository {
     }
 
     public int updateItemImageOnly(String cotId, String imageId1, String imageId2) {
-        String sql = "update DATABASE_MASTER set FIRST_IMAGE = ?, FIRST_IMAGE2 = ? where COT_ID = ?";
+        String sql = "update DATABASE_MASTER " +
+                "set FIRST_IMAGE = ?, FIRST_IMAGE2 = ? " +
+                "where COT_ID = ?";
         return jdbcTemplate.update(sql, imageId1, imageId2, cotId);
     }
 
@@ -30,7 +37,9 @@ public class DatabaseMasterRepository {
     }
 
     public int clearMainImages(String cotId) {
-        String sql = "update DATABASE_MASTER set FIRST_IMAGE = NULL, FIRST_IMAGE2 = NULL where COT_ID = ?";
+        String sql = "update DATABASE_MASTER " +
+                "set FIRST_IMAGE = NULL, FIRST_IMAGE2 = NULL " +
+                "where COT_ID = ?";
         return jdbcTemplate.update(sql, cotId);
     }
 

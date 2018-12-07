@@ -1,16 +1,15 @@
 package kr.co.uniess.kto.batch.service;
 
-import java.io.File;
 import java.util.*;
 
-import kr.co.uniess.kto.batch.repository.model.Image;
+import kr.co.uniess.kto.batch.model.SourceImage;
+import kr.co.uniess.kto.batch.model.DestImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import kr.co.uniess.kto.batch.model.SourceImage;
 import kr.co.uniess.kto.batch.repository.ContentMasterRepository;
 import kr.co.uniess.kto.batch.repository.DatabaseMasterRepository;
 import kr.co.uniess.kto.batch.repository.ExcelImageUploadHistRepository;
@@ -46,6 +45,19 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
     private static final String MARK_SKIP = "SKIPPED";
     private static final String MARK_SAVE = "SAVED";
     private static final String MARK_FAIL = "FAILED";
+
+    private ImageTriggerListener triggerListener;
+
+    public interface ImageTriggerListener {
+        void onInserted(String imageId, SourceImage image);
+        void onDeleted(String imageId, SourceImage image);
+        void onSkipped(String imageId, SourceImage image);
+        void onError(SourceImage image, Throwable throwable);
+    }
+
+    public void setImageTriggerListener(ImageTriggerListener listener) {
+        triggerListener = listener;
+    }
 
     public ImageManipulateService(boolean isDebug) {
         this.isDebug = isDebug;
@@ -91,11 +103,11 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
         for (String contentId : contentMap.keySet()) {
             urlList = contentMap.get(contentId);
             if (!urlList.isEmpty()) {
-                List<Image> targets = imageRepository.selectDeleteTarget(contentId, urlList.toArray(new String[0]));
+                List<DestImage> targets = imageRepository.selectDeleteTarget(contentId, urlList.toArray(new String[0]));
                 if (targets != null && !targets.isEmpty()) {
                     ArrayList<String> imgIds = new ArrayList<>(targets.size());
                     ArrayList<String> imgPathList = new ArrayList<>(targets.size());
-                    for (Image i : targets) {
+                    for (DestImage i : targets) {
                         imgIds.add(i.getImgId());
                         imgPathList.add(i.getPath());
                     }

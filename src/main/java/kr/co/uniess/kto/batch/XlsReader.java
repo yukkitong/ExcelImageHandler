@@ -1,17 +1,14 @@
 package kr.co.uniess.kto.batch;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-
 import kr.co.uniess.kto.batch.model.SourceImage;
+import org.apache.poi.ss.usermodel.*;
 
 public class XlsReader {
 

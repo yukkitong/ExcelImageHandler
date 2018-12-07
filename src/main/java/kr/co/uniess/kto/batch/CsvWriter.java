@@ -14,10 +14,9 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
+import kr.co.uniess.kto.batch.model.SourceImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import kr.co.uniess.kto.batch.model.SourceImage;
 
 public class CsvWriter {
 
