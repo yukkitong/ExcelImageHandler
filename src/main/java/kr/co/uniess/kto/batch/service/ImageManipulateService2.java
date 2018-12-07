@@ -123,33 +123,32 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                 if (isInsert(image.mark)) {
                     if (isMain(image.mark)) {
                         try {
-                            // imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, true);
-                            // databaseMasterRepository.updateItemImageOnly(cotId, image.imgId);
+//                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, true);
+//                            databaseMasterRepository.updateItemImageOnly(cotId, image.imgId);
                             increase(MARK_COUNT_SAVE);
                             logger.info("::INSERT:: " + image + " [MAIN]");
                         } catch(Exception e) {
                             increase(MARK_COUNT_FAIL);
-                            logger.info("::ERROR:: " + image + " REASON: " + e.getMessage());
+                            logger.info("::ERROR-INSERT:: " + image + " REASON: " + e.getMessage());
                         }
                     } else {
                         try {
-                            // imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, false);
+//                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, false);
                             increase(MARK_COUNT_SAVE);
                             logger.info("::INSERT:: " + image);
                         } catch(Exception e) {
                             increase(MARK_COUNT_FAIL);
-                            logger.info("::ERROR:: " + image + " REASON: " + e.getMessage());
+                            logger.info("::ERROR-INSERT:: " + image + " REASON: " + e.getMessage());
                         }
                     }
                 } else if (isDelete(image.mark)) {
                     try {
-                        // imageRepository.deleteImage(image.imgId);
+//                        imageRepository.deleteImage(image.imgId);
                         // TODO delete file
                         increase(MARK_COUNT_DEL);
                         logger.info("::DELETE:: " + image);
                     } catch(Exception e) {
-                        increase(MARK_COUNT_FAIL);
-                        logger.info("::ERROR:: " + image + " REASON: " + e.getMessage());
+                        logger.info("::ERROR-DELETE:: " + image + " REASON: " + e.getMessage());
                     }
                 } else {
                     increase(MARK_COUNT_SKIP);
@@ -163,6 +162,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
         final int skipCount = counter.get(MARK_COUNT_SKIP);
         final int failCount = counter.get(MARK_COUNT_FAIL);
         if (eihId != null) {
+            // TODO update total count here
             excelImageUploadHistRepository.updateCount(eihId, saveCount, skipCount, failCount);
         }
     }
