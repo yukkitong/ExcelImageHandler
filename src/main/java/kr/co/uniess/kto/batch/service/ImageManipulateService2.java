@@ -45,6 +45,11 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     private static final String MARK_COUNT_FAIL = "FAILED";
     private static final String MARK_COUNT_DEL = "DELETED";
 
+
+    HashMap<String, Integer> contentTypeCache = new HashMap<>();
+
+
+
     static class CombinedImage {
         String imgId;
         String cotId;
@@ -64,6 +69,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     public ImageManipulateService2() {
         this.eihId = null;
         this.counter = new HashMap<>();
+        resetCounter();
     }
 
     public void setEihId(String eihId) {
@@ -71,6 +77,8 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     }
 
     private void resetCounter() {
+        contentTypeCache.clear();
+
         counter.clear();
         counter.put(MARK_COUNT_SKIP, 0);
         counter.put(MARK_COUNT_SAVE, 0);
@@ -123,8 +131,8 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                 if (isInsert(image.mark)) {
                     if (isMain(image.mark)) {
                         try {
-//                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, true);
-//                            databaseMasterRepository.updateItemImageOnly(cotId, image.imgId);
+                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, false);
+                            databaseMasterRepository.updateItemImageOnly(cotId, image.imgId);
                             increase(MARK_COUNT_SAVE);
                             logger.info("::INSERT:: " + image + " [MAIN]");
                         } catch(Exception e) {
@@ -133,7 +141,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                         }
                     } else {
                         try {
-//                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, false);
+                            imageRepository.insertImage(image.imgId, image.cotId, image.title, image.url, false);
                             increase(MARK_COUNT_SAVE);
                             logger.info("::INSERT:: " + image);
                         } catch(Exception e) {
@@ -143,7 +151,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                     }
                 } else if (isDelete(image.mark)) {
                     try {
-//                        imageRepository.deleteImage(image.imgId);
+                        imageRepository.deleteImage(image.imgId);
                         // TODO delete file
                         increase(MARK_COUNT_DEL);
                         logger.info("::DELETE:: " + image);
@@ -162,7 +170,6 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
         final int skipCount = counter.get(MARK_COUNT_SKIP);
         final int failCount = counter.get(MARK_COUNT_FAIL);
         if (eihId != null) {
-            // TODO update total count here
             excelImageUploadHistRepository.updateCount(eihId, saveCount, skipCount, failCount);
         }
     }
@@ -214,7 +221,10 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             }
 
             for (DestImage image : destImages) {
-                if (!contains(sourceImages, image)) {
+                // NOTE. `숙박`의 경우 침실 이미지가 액셀로 전달되지 않고 있다.
+                // 그래서 임시조치로 숙박의 경우는 스킵처리하도록 한다.
+                // TODO: 삭제 로직이 반드시 들어가야 한다. 룸이미지를 제외하더라도...
+                if (!isAccommodation(cotId) && !contains(sourceImages, image)) {
                     CombinedImage combinedImage = new CombinedImage();
                     combinedImage.imgId = image.getImgId();
                     combinedImage.cotId = cotId;
@@ -228,12 +238,22 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
         return resultMap;
     }
 
+
+    private boolean isAccommodation(String cotId) {
+        Integer contentType = contentTypeCache.get(cotId);
+        if (contentType == null) {
+            contentType = contentMasterRepository.getContentType(cotId);
+            contentTypeCache.put(cotId, contentType);
+        }
+        return contentType != null && contentType == 32;
+    }
+
     private boolean contains(List<DestImage> images, SourceImage image) {
         if (images == null || images.isEmpty()) {
             return false;
         }
         for (DestImage i : images) {
-            if (i.getUrl().equals(image.getUrl())) {
+            if (i.getUrl() != null && i.getUrl().equals(image.getUrl())) {
                 return true;
             }
         }
@@ -245,7 +265,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             return false;
         }
         for (SourceImage i : images) {
-            if (i.getUrl().equals(image.getUrl())) {
+            if (i.getUrl() != null && i.getUrl().equals(image.getUrl())) {
                 return true;
             }
         }

@@ -3,6 +3,7 @@ package kr.co.uniess.kto.batch.controller;
 import java.util.List;
 
 import kr.co.uniess.kto.batch.model.SourceImage;
+import kr.co.uniess.kto.batch.service.ImageManipulateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

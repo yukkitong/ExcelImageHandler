@@ -167,7 +167,7 @@ public class ImageManipulateService implements BatchService<List<SourceImage>> {
             try {
                 final String title = getTitle(item, index);
                 final String newImgId = RepositoryUtils.generateRandomId();
-                imageRepository.insertImage(newImgId, cotId, title, item.url, item.main);
+                imageRepository.insertImage(newImgId, cotId, title, item.url, false);
                 if (item.main) {
                     databaseMasterRepository.updateItemImageOnly(cotId, newImgId);
                 }

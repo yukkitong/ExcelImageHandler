@@ -42,4 +42,16 @@ public class ContentMasterRepository {
                 ") values (?, ?, ?)";
         return jdbcTemplate.update(sql, contentId, cotId, title);
     }
+
+    public Integer getContentType(String cotId) {
+        try {
+            String sql = "select CONTENT_TYPE from CONTENT_MASTER where COT_ID = ?";
+            return jdbcTemplate.queryForObject(sql,
+                    new Object[] { cotId },
+                    new int[] { Types.INTEGER },
+                    Integer.class);
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 }
