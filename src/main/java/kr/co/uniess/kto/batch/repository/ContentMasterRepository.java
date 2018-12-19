@@ -15,10 +15,11 @@ public class ContentMasterRepository {
 
     public boolean hasItem(String contentId) {
         String sql = "select count(*) CNT from CONTENT_MASTER where CONTENT_ID = ?";
-        return jdbcTemplate.queryForObject(sql,
+        Integer count = jdbcTemplate.queryForObject(sql,
                 new Object[] { contentId },
                 new int[] { Types.VARCHAR },
-                Integer.class) > 0;
+                Integer.class);
+        return count != null && count > 0;
     }
 
     public String getCotId(String contentId) {
@@ -43,12 +44,17 @@ public class ContentMasterRepository {
         return jdbcTemplate.update(sql, contentId, cotId, title);
     }
 
+    /**
+     * Get content type id
+     * @param cotId
+     * @return
+     */
     public Integer getContentType(String cotId) {
         try {
             String sql = "select CONTENT_TYPE from CONTENT_MASTER where COT_ID = ?";
             return jdbcTemplate.queryForObject(sql,
                     new Object[] { cotId },
-                    new int[] { Types.INTEGER },
+                    new int[] { Types.VARCHAR },
                     Integer.class);
         } catch(EmptyResultDataAccessException e) {
             return null;

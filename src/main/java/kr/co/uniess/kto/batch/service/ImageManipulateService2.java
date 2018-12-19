@@ -6,9 +6,11 @@ import kr.co.uniess.kto.batch.model.DestImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.*;
 
 @Service
@@ -30,6 +32,9 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     @Autowired
     private ExcelImageUploadHistRepository excelImageUploadHistRepository;
 
+    @Autowired
+    private AccommodationInfoRepository accommodationInfoRepository;
+
 
     private static final int MARK_SKIP = 0x00;
     private static final int MARK_INSERT = 0xf0;
@@ -46,8 +51,10 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     private static final String MARK_COUNT_DEL = "DELETED";
 
 
-    HashMap<String, Integer> contentTypeCache = new HashMap<>();
+    private HashMap<String, Integer> contentTypeCache = new HashMap<>();
 
+    @Value("${image.upload.path}")
+    private String imageLocation;
 
 
     static class CombinedImage {
@@ -55,6 +62,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
         String cotId;
         String url;
         String title;
+        String path;
         int mark;
 
         @Override
@@ -62,6 +70,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             return "{IMG_ID=" + imgId +
                     ", COT_ID=" + cotId +
                     ", TITLE=" + title +
+                    ", PATH=" + path +
                     ", URL=" + url + "}";
         }
     }
@@ -121,6 +130,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             } else {
                 increase(MARK_COUNT_SKIP);
             }
+            // System.out.print(".");
         }
 
         logger.info("::START:: " + new Date());
@@ -152,9 +162,14 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                 } else if (isDelete(image.mark)) {
                     try {
                         imageRepository.deleteImage(image.imgId);
-                        // TODO delete file
-                        increase(MARK_COUNT_DEL);
                         logger.info("::DELETE:: " + image);
+                        if (image.path != null && !image.path.isEmpty()) {
+                            File imageFile = new File(imageLocation + image.path);
+                            if (imageFile.exists() && imageFile.delete()) {
+                                logger.info("::DELETE-FILE:: " + imageFile.getAbsolutePath());
+                            }
+                        }
+                        increase(MARK_COUNT_DEL);
                     } catch(Exception e) {
                         logger.info("::ERROR-DELETE:: " + image + " REASON: " + e.getMessage());
                     }
@@ -182,11 +197,11 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     getCombinedImageMap(Map<String, List<SourceImage>> sourceImageMap, Map<String, List<DestImage>> destImageMap) {
         Map<String, List<CombinedImage>> resultMap = new HashMap<>();
 
-        //  Excel Images --- DB Images ---  Results
-        //  A  (main)        A              Skip A
-        //  B                B              Skip B
-        //  C                               Insert C
-        //                   D              Delete D
+        //  Excel Images (source) --- DB Images (dest) ---  Results
+        //  A  (main)                 A                     Skip A
+        //  B                         B                     Skip B
+        //  C                                               Insert C
+        //                            D                     Delete D
 
         for (String cotId : sourceImageMap.keySet()) {
             List<SourceImage> sourceImages = sourceImageMap.get(cotId);
@@ -221,17 +236,29 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             }
 
             for (DestImage image : destImages) {
-                // NOTE. `숙박`의 경우 침실 이미지가 액셀로 전달되지 않고 있다.
-                // 그래서 임시조치로 숙박의 경우는 스킵처리하도록 한다.
-                // TODO: 삭제 로직이 반드시 들어가야 한다. 룸이미지를 제외하더라도...
-                if (!isAccommodation(cotId) && !contains(sourceImages, image)) {
-                    CombinedImage combinedImage = new CombinedImage();
-                    combinedImage.imgId = image.getImgId();
-                    combinedImage.cotId = cotId;
-                    combinedImage.title = image.getImageDescription();
-                    combinedImage.url = image.getUrl();
-                    combinedImage.mark = MARK_DELETE;
-                    resultMap.get(cotId).add(combinedImage);
+                if (!contains(sourceImages, image)) {
+                    if (isAccommodation(cotId)) {
+                        // NOTE. `숙박`의 경우 침실 이미지가 액셀로 전달되지 않고 있다.
+                        if (!accommodationInfoRepository.containsRoomImage(cotId, image.getImgId())) {
+                            CombinedImage combinedImage = new CombinedImage();
+                            combinedImage.imgId = image.getImgId();
+                            combinedImage.cotId = cotId;
+                            combinedImage.title = image.getImageDescription();
+                            combinedImage.url = image.getUrl();
+                            combinedImage.path = image.getPath();
+                            combinedImage.mark = MARK_DELETE;
+                            resultMap.get(cotId).add(combinedImage);
+                        }
+                    } else {
+                        CombinedImage combinedImage = new CombinedImage();
+                        combinedImage.imgId = image.getImgId();
+                        combinedImage.cotId = cotId;
+                        combinedImage.title = image.getImageDescription();
+                        combinedImage.url = image.getUrl();
+                        combinedImage.path = image.getPath();
+                        combinedImage.mark = MARK_DELETE;
+                        resultMap.get(cotId).add(combinedImage);
+                    }
                 }
             }
         }
