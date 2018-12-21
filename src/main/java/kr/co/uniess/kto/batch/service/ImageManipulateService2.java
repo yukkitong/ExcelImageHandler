@@ -38,7 +38,8 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
 
     private static final int MARK_SKIP = 0x00;
     private static final int MARK_INSERT = 0xf0;
-    private static final int MARK_INSERT_MAIN = 0xf1;
+    private static final int MARK_INSERT_MAIN = 0xff;
+    private static final int MARK_MAIN = 0x0f;
     private static final int MARK_DELETE = 0x01;
 
     private String eihId;
@@ -104,7 +105,7 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
     }
 
     private boolean isMain(int value) {
-        return value == MARK_INSERT_MAIN;
+        return (value & MARK_MAIN) == MARK_MAIN;
     }
 
     private boolean isDelete(int value) {
@@ -173,6 +174,13 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
                     } catch(Exception e) {
                         logger.info("::ERROR-DELETE:: " + image + " REASON: " + e.getMessage());
                     }
+                } else if (isMain(image.mark)) {
+                    try {
+                        databaseMasterRepository.updateItemImageOnly(cotId, image.imgId);
+                        logger.info("::UPDATE:: " + image + " [MAIN]");
+                    } catch(Exception e) {
+                        logger.info("::ERROR-DELETE:: " + image + " REASON: " + e.getMessage());
+                    }
                 } else {
                     increase(MARK_COUNT_SKIP);
                     logger.info("::SKIP:: " + image);
@@ -211,27 +219,39 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
 
             int i = 0;
             for (SourceImage image : sourceImages) {
-                if (!contains(destImages, image)) {
-                    CombinedImage combinedImage = new CombinedImage();
-                    combinedImage.imgId = RepositoryUtils.generateRandomId();
-                    combinedImage.cotId = cotId;
+                if (isCourse(cotId)) {
                     if (image.main) {
+                        CombinedImage combinedImage = new CombinedImage();
+                        combinedImage.imgId = RepositoryUtils.generateRandomId();
+                        combinedImage.cotId = cotId;
                         combinedImage.title = image.getTitle();
-                        combinedImage.mark = MARK_INSERT_MAIN;
-                    } else {
-                        combinedImage.title = image.getTitle() + " " + (++i);
-                        combinedImage.mark = MARK_INSERT;
+                        combinedImage.mark = MARK_MAIN;
+                        combinedImage.url = image.getUrl();
+                        resultMap.get(cotId).add(combinedImage);
                     }
-                    combinedImage.url = image.getUrl();
-                    resultMap.get(cotId).add(combinedImage);
                 } else {
-                    CombinedImage combinedImage = new CombinedImage();
-                    combinedImage.imgId = "[UNKNOWN]";
-                    combinedImage.cotId = cotId;
-                    combinedImage.title = image.getTitle();
-                    combinedImage.url = image.getUrl();
-                    combinedImage.mark = MARK_SKIP;
-                    resultMap.get(cotId).add(combinedImage);
+                    if (!contains(destImages, image)) {
+                        CombinedImage combinedImage = new CombinedImage();
+                        combinedImage.imgId = RepositoryUtils.generateRandomId();
+                        combinedImage.cotId = cotId;
+                        if (image.main) {
+                            combinedImage.title = image.getTitle();
+                            combinedImage.mark = MARK_INSERT_MAIN;
+                        } else {
+                            combinedImage.title = image.getTitle() + " " + (++i);
+                            combinedImage.mark = MARK_INSERT;
+                        }
+                        combinedImage.url = image.getUrl();
+                        resultMap.get(cotId).add(combinedImage);
+                    } else {
+                        CombinedImage combinedImage = new CombinedImage();
+                        combinedImage.imgId = "[UNKNOWN]";
+                        combinedImage.cotId = cotId;
+                        combinedImage.title = image.getTitle();
+                        combinedImage.url = image.getUrl();
+                        combinedImage.mark = MARK_SKIP;
+                        resultMap.get(cotId).add(combinedImage);
+                    }
                 }
             }
 
@@ -273,6 +293,16 @@ public class ImageManipulateService2 implements BatchService<List<SourceImage>> 
             contentTypeCache.put(cotId, contentType);
         }
         return contentType != null && contentType == 32;
+    }
+
+
+    private boolean isCourse(String cotId) {
+        Integer contentType = contentTypeCache.get(cotId);
+        if (contentType == null) {
+            contentType = contentMasterRepository.getContentType(cotId);
+            contentTypeCache.put(cotId, contentType);
+        }
+        return contentType != null && contentType == 25;
     }
 
     private boolean contains(List<DestImage> images, SourceImage image) {
